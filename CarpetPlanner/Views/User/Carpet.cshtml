@@ -1,0 +1,49 @@
+﻿@model CarpetViewModel
+
+@{
+    ViewData["Title"] = "";
+}
+
+@section Styles
+{
+
+    <link rel="stylesheet" href="~/css/carpet.css"/>
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/carpet.js"></script>
+}
+
+<input type="hidden" id="username" value="@Model.Username"/>
+<input type="hidden" id="carpet-id" value="@Model.Carpet.Id"/>
+
+<div id="menu">
+    <h2>Menu</h2>
+    <button id="new-stripe">Add stripe</button>
+    <button id="delete-stripes">Delete stripes</button>
+</div>
+
+<div id="main">
+    <h2 id="name">@Model.Carpet.Name</h2>
+    <input type="text" id="new-name" style="display: none"/>
+    <div id="carpet">
+        @foreach (var stripe in Model.Carpet.Stripes)
+        {
+            <div data-stripe-id="@stripe.Id" data-stripe-height="@stripe.Height" style="background-color: @stripe.ColorString"></div>
+        }
+    </div>
+    <h2 id="width">
+        <span id="width-text">Width: </span>
+        <span id="width-value">@Model.Carpet.Width</span>
+        <input type="number" id="width-input" style="display: none"/>
+    </h2>
+</div>
+
+<div id="edit">
+    <h2>Modify selected</h2>
+    @foreach (var color in Model.Colors)
+    {
+        <div data-color-id="@color.Id" style="background-color: #@color.Rgb"></div>
+    }
+</div>

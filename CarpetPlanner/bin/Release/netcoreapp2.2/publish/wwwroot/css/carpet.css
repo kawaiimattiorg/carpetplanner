@@ -1,0 +1,61 @@
+#menu, #main, #edit {
+    position: absolute;
+    top: 1%;
+    bottom: 1%;
+}
+
+#menu {
+    left: 1%;
+    width: 10%;
+}
+
+#menu > button {
+    display: block;
+}
+
+#menu > button + button {
+    margin-top: 1%;
+}
+
+#main {
+    left: 12%;
+    width: 43%;
+}
+
+#edit {
+    left: 56%;
+    overflow: auto;
+    width: 43%;
+}
+
+#carpet {
+    height: 85%;
+    position: relative;
+}
+
+#carpet > div {
+    float: right;
+    height: 15px;
+    width: 90%;
+}
+
+@font-face {
+    font-family: glyphicon;
+    src: url('../fonts/glyphicons-halflings-regular.ttf');
+}
+
+#carpet > div.active::after {
+    content: "\e013";
+    font-family: glyphicon;
+    font-size: 70%;
+    position: relative;
+    right: 15px;
+    vertical-align: 33%;
+}
+
+#edit > div[data-color-id]{
+    display: inline-block;
+    float: left;
+    height: 12%;
+    width: 33.3%;
+}

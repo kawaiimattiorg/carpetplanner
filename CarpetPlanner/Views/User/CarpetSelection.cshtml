@@ -1,0 +1,13 @@
+﻿@model CarpetSelectionViewModel
+@{
+    ViewData["Title"] = "Carpet selection";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Select carpet</h1>
+    
+    @foreach (var carpet in Model.Carpets)
+    {
+        <a asp-area="" asp-controller="User" asp-action="GetCarpet" asp-route-username="@carpet.Username" asp-route-id="@carpet.Id">@carpet.Name</a>
+    }
+</div>

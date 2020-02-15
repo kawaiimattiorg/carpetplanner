@@ -1,0 +1,21 @@
+﻿@model UserSelectionViewModel
+@{
+    ViewData["Title"] = "User selection";
+}
+
+@section Scripts {
+     <script type="text/javascript" src="~/js/user-selection.js"></script>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Select user</h1>
+
+    @foreach (var username in Model.Usernames)
+    {
+        <a asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@username">@username</a>
+    }
+
+    <h2>New user</h2>
+    <input type="text" id="username"/>
+    <button type="button" id="confirm">Create user</button>
+</div>
