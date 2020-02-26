@@ -11,10 +11,11 @@
 
 #menu > button {
     display: block;
+    width: 100%;
 }
 
 #menu > button + button {
-    margin-top: 1%;
+    margin-top: 24px;
 }
 
 #main {
@@ -53,7 +54,7 @@
     vertical-align: 33%;
 }
 
-#edit > div[data-color-id]{
+#edit > div[data-color-id] {
     display: inline-block;
     float: left;
     height: 12%;
