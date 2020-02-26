@@ -19,9 +19,9 @@
 <input type="hidden" id="carpet-id" value="@Model.Carpet.Id"/>
 
 <div id="menu">
-    <h2>Menu</h2>
-    <button id="new-stripe">Add stripe</button>
-    <button id="delete-stripes">Delete stripes</button>
+    <h2>Valikko</h2>
+    <button id="new-stripe">Lisää raita</button>
+    <button id="delete-stripes">Poista raidat</button>
 </div>
 
 <div id="main">
@@ -34,14 +34,14 @@
         }
     </div>
     <h2 id="width">
-        <span id="width-text">Width: </span>
+        <span id="width-text">Leveys: </span>
         <span id="width-value">@Model.Carpet.Width</span>
         <input type="number" id="width-input" style="display: none"/>
     </h2>
 </div>
 
 <div id="edit">
-    <h2>Modify selected</h2>
+    <h2>Muuta valittuja</h2>
     @foreach (var color in Model.Colors)
     {
         <div data-color-id="@color.Id" style="background-color: #@color.Rgb"></div>

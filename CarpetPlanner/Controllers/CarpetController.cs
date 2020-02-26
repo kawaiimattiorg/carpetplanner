@@ -35,13 +35,11 @@
             var carpet = new CarpetEntity
             {
                 Username = username,
-                Name = "New carpet"
+                Name = "Uusi matto"
             };
 
             _context.Carpets.Add(carpet);
             _context.SaveChanges();
-
-            // TODO: NÄKYYKÖ DEFAULT VALUET TÄSSÄ?
 
             return carpet;
         }
