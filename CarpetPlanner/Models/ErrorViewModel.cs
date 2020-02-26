@@ -1,5 +1,3 @@
-using System;
-
 namespace CarpetPlanner.Models
 {
     public class ErrorViewModel

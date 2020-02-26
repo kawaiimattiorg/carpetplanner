@@ -1,7 +1,6 @@
 ﻿namespace CarpetPlanner.Models
 {
     using System.Collections.Generic;
-    using CarpetPlanner.Models;
 
     public class CarpetSelectionViewModel
     {
