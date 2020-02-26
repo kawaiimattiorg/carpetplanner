@@ -3,11 +3,28 @@
     ViewData["Title"] = "Carpet selection";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Select carpet</h1>
-    
-    @foreach (var carpet in Model.Carpets)
-    {
-        <a asp-area="" asp-controller="User" asp-action="GetCarpet" asp-route-username="@carpet.Username" asp-route-id="@carpet.Id">@carpet.Name</a>
-    }
+
+@section Styles
+{
+
+    <link rel="stylesheet" href="~/css/carpet-selection.css"/>
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Select carpet</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var carpet in Model.Carpets)
+        {
+            <div class="col-12 col-sm-3">
+                <a class="btn btn-info" asp-area="" asp-controller="User" asp-action="GetCarpet" asp-route-username="@carpet.Username" asp-route-id="@carpet.Id">@carpet.Name</a>
+            </div>
+        }
+    </div>
+
 </div>

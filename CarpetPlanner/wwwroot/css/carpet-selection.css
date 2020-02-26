@@ -1,0 +1,7 @@
+.col + .col {
+    margin-top: 16px;
+}
+
+.btn-info {
+    width: 100%;
+}
