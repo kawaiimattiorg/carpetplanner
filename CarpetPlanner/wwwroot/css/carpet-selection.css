@@ -1,3 +1,7 @@
+#user-selection {
+    float: right;
+}
+
 .row + .row {
     margin-top: 16px;
 }
