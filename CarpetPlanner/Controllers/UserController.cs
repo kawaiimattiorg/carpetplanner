@@ -54,6 +54,7 @@
         {
             var data = new CarpetSelectionViewModel
             {
+                Username = username,
                 Carpets = _context
                     .Carpets
                     .Where(carpet => carpet.Username == username && !carpet.Removed)
