@@ -14,7 +14,8 @@
     width: 100%;
 }
 
-#menu > button + button {
+#menu > button + button,
+#menu > button + a {
     margin-top: 24px;
 }
 
