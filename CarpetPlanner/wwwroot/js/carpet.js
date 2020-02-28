@@ -97,7 +97,7 @@ function initializeCarpetWidthChange() {
                 }
             })
         });
-        
+
         $widthInput.width($('#width').width() - $('#width-text').width() - 10);
         $widthInput.height($widthValue.height());
 
@@ -171,9 +171,20 @@ function initializePostStripe() {
                         'data-stripe-id': data.id,
                         'data-stripe-height': data.height
                     },
-                    css: {
-                        "backgroundColor": data.colorString
-                    }
+                    html: [
+                        $('<div>', {
+                            'class': 'stripe-selection',
+                            html: $('<p>')
+                        }),
+                        $('<div>', {
+                            'class': 'stripe-element',
+                            css: {
+                                "backgroundColor": data.colorString
+                            }
+                        }),
+                        $('<div>', {
+                            'class': 'stripe-width'
+                        })]
                 }));
 
                 updateStripeSizes();
@@ -199,7 +210,7 @@ function performStripePatch(data) {
                 }
 
                 if (response.rgb !== null) {
-                    $stripe.css('backgroundColor', '#' + response.rgb);
+                    $stripe.children('.stripe-element').css('backgroundColor', '#' + response.rgb);
                 }
 
                 if (response.remove === true) {
@@ -217,11 +228,18 @@ function performStripePatch(data) {
 function updateStripeSizes() {
     let $carpet = $('#carpet');
 
-    let uiHeightPx = $carpet.height();
-    let uiWidthPx = $carpet.width();
-    let uiRatio = uiWidthPx / uiHeightPx;
-
     let $stripes = $carpet.children('div[data-stripe-id]');
+
+    if ($stripes.length === 0) {
+        return;
+    }
+
+    let selectionWidth = $stripes.first().children('.stripe-selection').width();
+    let widthWidth = $stripes.first().children('.stripe-width').width();
+
+    let uiHeightPx = $carpet.height();
+    let uiWidthPx = $carpet.width() - selectionWidth - widthWidth;
+    let uiRatio = uiWidthPx / uiHeightPx;
 
     let carpetHeight = 0;
     $stripes.each(function () {
@@ -241,7 +259,7 @@ function updateStripeSizes() {
 
         $stripes.each(function () {
             let $this = $(this);
-            $this.css('width', widthPx + 'px');
+            $this.children('.stripe-element').css('width', widthPx + 'px');
             $this.css('height', parseInt($this.data('stripeHeight')) * cmToPixel + 'px');
         });
     } else {
@@ -249,7 +267,7 @@ function updateStripeSizes() {
 
         $stripes.each(function () {
             let $this = $(this);
-            $this.css('width', '100%');
+            $this.children('.stripe-element').css('width', 'calc(100% - 64px)');
             $this.css('height', parseInt($this.data('stripeHeight')) * cmToPixel + 'px');
         });
     }

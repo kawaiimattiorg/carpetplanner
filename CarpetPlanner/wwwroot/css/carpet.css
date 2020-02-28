@@ -37,9 +37,11 @@
 }
 
 #carpet > div {
-    float: right;
     height: 15px;
-    width: 90%;
+}
+
+#carpet > div > div.stripe-element {
+    width: calc(100% - 64px);
 }
 
 @font-face {
@@ -47,13 +49,27 @@
     src: url('../fonts/glyphicons-halflings-regular.ttf');
 }
 
-#carpet > div.active::after {
+#carpet > div > div {
+    display: inline-block;
+    float: left;
+    height: 100%;
+}
+
+#carpet > div > div.stripe-selection {
+    width: 32px;
+}
+
+#carpet > div > div.stripe-width {
+    width: 32px;
+}
+
+#carpet > div.active > div.stripe-selection > p {
+    text-align: center;
+}
+
+#carpet > div.active > div.stripe-selection > p::after {
     content: "\e013";
     font-family: glyphicon;
-    font-size: 70%;
-    position: relative;
-    right: 15px;
-    vertical-align: 33%;
 }
 
 #edit > div[data-color-id] {

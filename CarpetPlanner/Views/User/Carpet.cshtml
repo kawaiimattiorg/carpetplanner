@@ -31,7 +31,11 @@
     <div id="carpet">
         @foreach (var stripe in Model.Carpet.Stripes)
         {
-            <div data-stripe-id="@stripe.Id" data-stripe-height="@stripe.Height" style="background-color: @stripe.ColorString"></div>
+            <div data-stripe-id="@stripe.Id" data-stripe-height="@stripe.Height">
+                <div class="stripe-selection"><p></p></div>
+                <div class="stripe-element" style="background-color: @stripe.ColorString"></div>
+                <div class="stripe-width"></div>
+            </div>
         }
     </div>
     <h2 id="width">
