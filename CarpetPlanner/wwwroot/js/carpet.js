@@ -99,7 +99,7 @@ function initializeCarpetWidthChange() {
             })
         });
 
-        $widthInput.width($('#width').width() - $('#width-text').width() - 10);
+        $widthInput.width($('#width-value').width() - 10);
         $widthInput.height($widthValue.height());
 
         $widthValue.hide();

@@ -6,7 +6,7 @@
 
 #menu {
     left: 1%;
-    width: 10%;
+    width: 15%;
 }
 
 #menu > button,
@@ -21,18 +21,18 @@
 }
 
 #main {
-    left: 12%;
+    left: 17%;
     width: 43%;
 }
 
 #edit {
-    left: 56%;
+    left: 61%;
     overflow: auto;
-    width: 43%;
+    width: 38%;
 }
 
 #carpet {
-    height: 85%;
+    height: calc(99% - 38px);
     position: relative;
 }
 

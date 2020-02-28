@@ -23,6 +23,14 @@
     <button id="new-stripe" class="btn btn-primary">Lisää raita</button>
     <button id="delete-stripes" class="btn btn-primary">Poista raidat</button>
     <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@Model.Username">Valitse matto</a>
+
+    <hr/>
+
+    <h2 id="width">Leveys:</h2>
+    <h2>
+        <p id="width-value">@Model.Carpet.Width</p>
+        <input type="number" id="width-input" style="display: none"/>
+    </h2>
 </div>
 
 <div id="main">
@@ -32,17 +40,14 @@
         @foreach (var stripe in Model.Carpet.Stripes)
         {
             <div data-stripe-id="@stripe.Id" data-stripe-height="@stripe.Height">
-                <div class="stripe-selection"><p></p></div>
+                <div class="stripe-selection">
+                    <p></p>
+                </div>
                 <div class="stripe-element" style="background-color: @stripe.ColorString"></div>
                 <div class="stripe-width"></div>
             </div>
         }
     </div>
-    <h2 id="width">
-        <span id="width-text">Leveys: </span>
-        <span id="width-value">@Model.Carpet.Width</span>
-        <input type="number" id="width-input" style="display: none"/>
-    </h2>
 </div>
 
 <div id="edit">
