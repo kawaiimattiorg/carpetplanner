@@ -90,6 +90,7 @@ function initializeCarpetWidthChange() {
                 }),
                 success: function () {
                     $widthValue.text(newWidth);
+                    updateStripeSizes();
                 },
                 complete: function () {
                     $widthInput.hide();
