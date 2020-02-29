@@ -22,6 +22,7 @@
     <h2>Valikko</h2>
     <button id="new-stripe" class="btn btn-primary">Lisää raita</button>
     <button id="change-height" class="btn btn-primary">Muuta pituutta</button>
+    <button id="change-name" class="btn btn-primary">Muuta nimeä</button>
     <button id="delete-stripes" class="btn btn-primary">Poista raidat</button>
     <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@Model.Username">Valitse matto</a>
 
@@ -43,7 +44,6 @@
 
 <div id="main">
     <h2 id="name">@Model.Carpet.Name</h2>
-    <input type="text" id="new-name" style="display: none"/>
     <div id="carpet">
         @foreach (var stripe in Model.Carpet.Stripes)
         {
@@ -61,7 +61,7 @@
 </div>
 
 <div id="edit">
-    <h2>Muuta valittuja</h2>
+    <h2>Muuta väriä</h2>
     @foreach (var color in Model.Colors)
     {
         <div data-color-id="@color.Id" style="background-color: #@color.Rgb"></div>

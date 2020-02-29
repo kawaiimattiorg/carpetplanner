@@ -30,40 +30,24 @@ $(document).ready(function () {
 });
 
 function initializeCarpetNameChange() {
-    let $name = $('#name');
-    let $newName = $('#new-name');
+    $('#change-name').click(function () {
+        let name = prompt('Anna uusi nimi');
 
-    $name.click(function () {
-        $newName.val($name.text());
+        if (name === null || name.length === 0) {
+            return;
+        }
 
-        $newName.one('focusout', function () {
-            let newName = $newName.val();
-            if (newName.length === 0) {
-                $newName.hide();
-                $name.show();
-                return;
+        $.ajax({
+            url: '/carpet/' + username + '/' + carpetId,
+            method: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                name: name
+            }),
+            success: function () {
+                $('#name').text(name);
             }
-
-            $.ajax({
-                url: '/carpet/' + username + '/' + carpetId,
-                method: 'PATCH',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    name: newName
-                }),
-                success: function () {
-                    $name.text(newName);
-                },
-                complete: function () {
-                    $newName.hide();
-                    $name.show();
-                }
-            })
         });
-
-        $name.hide();
-        $newName.show();
-        $newName.focus();
     });
 }
 
