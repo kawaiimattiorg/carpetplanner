@@ -25,6 +25,10 @@
     width: 51%;
 }
 
+#name {
+    padding-left: 32px;
+}
+
 #edit {
     left: 69%;
     overflow: auto;
