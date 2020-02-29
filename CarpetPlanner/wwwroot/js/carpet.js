@@ -52,44 +52,26 @@ function initializeCarpetNameChange() {
 }
 
 function initializeCarpetWidthChange() {
-    let $widthValue = $('#width-value');
-    let $widthInput = $('#width-input');
 
-    $widthValue.click(function () {
-        $widthInput.val(parseInt($widthValue.text()));
+    $('#change-width').click(function () {
+        let width = parseInt(prompt('Anna uusi leveys senttimetreinä'));
 
-        $widthInput.one('focusout', function () {
-            let newWidth = $widthInput.val();
-            if (newWidth <= 0) {
-                $widthInput.hide();
-                $widthValue.show();
-                return;
+        if (isNaN(width)) {
+            return;
+        }
+
+        $.ajax({
+            url: '/carpet/' + username + '/' + carpetId,
+            method: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                width: width
+            }),
+            success: function () {
+                $('#width-value').text(width);
+                updateStripeSizes();
             }
-
-            $.ajax({
-                url: '/carpet/' + username + '/' + carpetId,
-                method: 'PATCH',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    width: newWidth
-                }),
-                success: function () {
-                    $widthValue.text(newWidth);
-                    updateStripeSizes();
-                },
-                complete: function () {
-                    $widthInput.hide();
-                    $widthValue.show();
-                }
-            })
         });
-
-        $widthInput.width($('#width-value').width() - 10);
-        $widthInput.height($widthValue.height());
-
-        $widthValue.hide();
-        $widthInput.show();
-        $widthInput.focus();
     });
 }
 

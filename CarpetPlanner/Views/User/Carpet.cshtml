@@ -22,6 +22,7 @@
     <h2>Valikko</h2>
     <button id="new-stripe" class="btn btn-primary">Lisää raita</button>
     <button id="change-height" class="btn btn-primary">Muuta pituutta</button>
+    <button id="change-width" class="btn btn-primary">Muuta leveyttä</button>
     <button id="change-name" class="btn btn-primary">Muuta nimeä</button>
     <button id="delete-stripes" class="btn btn-primary">Poista raidat</button>
     <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@Model.Username">Valitse matto</a>
@@ -31,7 +32,6 @@
     <h2 id="width">Leveys:</h2>
     <h2>
         <p id="width-value">@Model.Carpet.Width</p>
-        <input type="number" id="width-input" style="display: none"/>
     </h2>
 
     <hr/>
