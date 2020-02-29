@@ -7,6 +7,7 @@ $(document).ready(function () {
 
     initializeCarpetNameChange();
     initializeCarpetWidthChange();
+    initializeStripeHeightChange();
 
     initializeSelectStripe();
     initializePostStripe();
@@ -108,6 +109,29 @@ function initializeCarpetWidthChange() {
     });
 }
 
+function initializeStripeHeightChange() {
+    $('#change-height').click(function () {
+        let stripes = getSelectedStripes();
+
+        if (stripes.length === 0) {
+            return;
+        }
+
+        var height = parseInt(prompt('Anna uusi pituus senttimetreinä'));
+
+        if (isNaN(height)) {
+            return;
+        }
+
+        let data = {
+            stripes: stripes,
+            height: height
+        };
+
+        performStripePatch(data);
+    });
+}
+
 function getSelectedStripes() {
     return $('#carpet')
         .children('.active')
@@ -184,11 +208,15 @@ function initializePostStripe() {
                             }
                         }),
                         $('<div>', {
-                            'class': 'stripe-width'
+                            'class': 'stripe-height',
+                            html: $('<p>', {
+                                text: data.height
+                            })
                         })]
                 }));
 
                 updateStripeSizes();
+                updateStripeHeight();
             }
         });
     });
@@ -208,6 +236,7 @@ function performStripePatch(data) {
 
                 if (response.height !== null) {
                     $stripe.data('stripeHeight', response.height);
+                    $stripe.children('.stripe-height').children('p').text(response.height);
                 }
 
                 if (response.rgb !== null) {
@@ -221,9 +250,22 @@ function performStripePatch(data) {
 
             if (response.height !== null || response.remove === true) {
                 updateStripeSizes();
+                updateStripeHeight();
             }
         }
     });
+}
+
+function updateStripeHeight() {
+    let carpetHeight = 0;
+
+    $('#carpet')
+        .children('div[data-stripe-id]')
+        .each(function () {
+            carpetHeight += parseInt($(this).data('stripeHeight'));
+        });
+
+    $('#height-value').text(carpetHeight);
 }
 
 function updateStripeSizes() {
@@ -236,7 +278,7 @@ function updateStripeSizes() {
     }
 
     let selectionWidth = $stripes.first().children('.stripe-selection').width();
-    let widthWidth = $stripes.first().children('.stripe-width').width();
+    let widthWidth = $stripes.first().children('.stripe-height').width();
 
     let uiHeightPx = $carpet.height();
     let uiWidthPx = $carpet.width() - selectionWidth - widthWidth;
@@ -268,7 +310,7 @@ function updateStripeSizes() {
 
         $stripes.each(function () {
             let $this = $(this);
-            $this.children('.stripe-element').css('width', 'calc(100% - 64px)');
+            $this.children('.stripe-element').css('width', 'calc(100% - 80px)');
             $this.css('height', parseInt($this.data('stripeHeight')) * cmToPixel + 'px');
         });
     }

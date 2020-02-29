@@ -22,13 +22,13 @@
 
 #main {
     left: 17%;
-    width: 43%;
+    width: 51%;
 }
 
 #edit {
-    left: 61%;
+    left: 69%;
     overflow: auto;
-    width: 38%;
+    width: 30%;
 }
 
 #carpet {
@@ -41,7 +41,7 @@
 }
 
 #carpet > div > div.stripe-element {
-    width: calc(100% - 64px);
+    width: calc(100% - 80px);
 }
 
 @font-face {
@@ -59,8 +59,13 @@
     width: 32px;
 }
 
-#carpet > div > div.stripe-width {
-    width: 32px;
+#carpet > div > div.stripe-height {
+    width: 48px;
+}
+
+#carpet > div > div.stripe-height > p {
+    margin: 0 0 0 5px;
+    width: 48px;
 }
 
 #carpet > div.active > div.stripe-selection > p {
