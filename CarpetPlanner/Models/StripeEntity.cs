@@ -37,5 +37,10 @@ namespace CarpetPlanner.Models
         /// Stripe height in centimeters
         /// </summary>
         public double Height { get; set; }
+
+        /// <summary>
+        /// Stripe place in carpet.
+        /// </summary>
+        public int Ordinal { get; set; }
     }
 }

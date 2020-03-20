@@ -37,5 +37,27 @@ namespace CarpetPlanner.Models
         /// </summary>
         [JsonProperty(PropertyName = "remove")]
         public bool Remove { get; set; }
+
+        /// <summary>
+        /// Whether to move stripes up or down.
+        /// </summary>
+        [JsonProperty(PropertyName = "moveDirection")]
+        public MoveDirection MoveDirection { get; set; }
+        
+        /// <summary>
+        /// List of stripe identifiers that were moved.
+        /// </summary>
+        [JsonProperty(PropertyName = "moved")]
+        public IList<int> Moved { get; set; }
+    }
+
+    /// <summary>
+    /// Enumerable for selecting stripe move direction
+    /// </summary>
+    public enum MoveDirection
+    {
+        Up = -1,
+        NoMove = 0,
+        Down = 1
     }
 }

@@ -90,7 +90,7 @@
             var stripes = _context
                 .Stripes
                 .Where(stripe => stripe.CarpetId == id)
-                .OrderBy(stripe => stripe.Id)
+                .OrderBy(stripe => stripe.Ordinal)
                 .ToList();
 
             var colors = _context

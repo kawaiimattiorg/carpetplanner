@@ -7,6 +7,7 @@ $(document).ready(function () {
 
     initializeCarpetNameChange();
     initializeCarpetWidthChange();
+    initializeMoveStripes();
     initializeStripeHeightChange();
 
     initializeSelectStripe();
@@ -72,6 +73,23 @@ function initializeCarpetWidthChange() {
                 updateStripeSizes();
             }
         });
+    });
+}
+
+function initializeMoveStripes() {
+    $('#move-up, #move-down').click(function () {
+        let stripes = getSelectedStripes();
+
+        if (stripes.length === 0) {
+            return;
+        }
+
+        let data = {
+            stripes: stripes,
+            moveDirection: parseInt($(this).data('moveDirection'))
+        };
+
+        performStripePatch(data);
     });
 }
 
@@ -214,10 +232,32 @@ function performStripePatch(data) {
                 }
             });
 
+            if (response.moveDirection !== undefined && response.moveDirection !== null) {
+                updateStripeOrder(response.moved, response.moveDirection);
+            }
+
             if (response.height !== null || response.remove === true) {
                 updateStripeSizes();
                 updateStripeHeight();
             }
+        }
+    });
+}
+
+function updateStripeOrder(moved, direction) {
+    $.each(moved, function (index, id) {
+        let stripe = $('#carpet')
+            .children('div[data-stripe-id=' + id + ']')
+            .first();
+
+        // move up
+        if (direction === -1) {
+            stripe.insertBefore(stripe.prev());
+        }
+
+        // move down
+        if (direction === 1) {
+            stripe.insertAfter(stripe.next());
         }
     });
 }

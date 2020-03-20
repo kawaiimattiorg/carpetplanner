@@ -1,5 +1,7 @@
 ﻿namespace CarpetPlanner.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -146,10 +148,6 @@
                 .Where(stripe => stripe.CarpetId == id && patch.Stripes.Contains(stripe.Id))
                 .ToList();
 
-            patch.Stripes = stripes
-                .Select(stripe => stripe.Id)
-                .ToList();
-
             var colorEntity = patch.Color == null
                 ? null
                 : _context
@@ -164,7 +162,29 @@
             {
                 patch.Rgb = colorEntity.Rgb;
             }
-            
+
+            switch (patch.MoveDirection)
+            {
+                case MoveDirection.Up:
+                    stripes = stripes
+                        .OrderBy(stripe => stripe.Ordinal)
+                        .ToList();
+                    break;
+                case MoveDirection.NoMove:
+                    break;
+                case MoveDirection.Down:
+                    stripes = stripes
+                        .OrderByDescending(stripe => stripe.Ordinal)
+                        .ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            patch.Stripes = stripes
+                .Select(stripe => stripe.Id)
+                .ToList();
+
             foreach (var stripe in stripes)
             {
                 if (patch.Color != null)
@@ -177,13 +197,42 @@
                     stripe.Height = patch.Height.Value;
                 }
 
+                if (patch.MoveDirection != MoveDirection.NoMove)
+                {
+                    var other = patch.MoveDirection == MoveDirection.Up
+                        ? _context
+                            .Stripes
+                            .Where(entity => entity.CarpetId == stripe.CarpetId && entity.Ordinal < stripe.Ordinal)
+                            .OrderByDescending(entity => entity.Ordinal)
+                            .FirstOrDefault()
+                        : _context
+                            .Stripes
+                            .Where(entity => entity.CarpetId == stripe.CarpetId && entity.Ordinal > stripe.Ordinal)
+                            .OrderBy(entity => entity.Ordinal)
+                            .FirstOrDefault();
+
+                    if (other != null && !patch.Stripes.Contains(other.Id)) // TODO: TÄMÄ EHTO EI TOIMI JOS SIIRRETÄÄN KAHTA VIEREKKÄISTÄ RAITAA
+                    {
+                        var ordinal = other.Ordinal;
+                        other.Ordinal = stripe.Ordinal;
+                        stripe.Ordinal = ordinal;
+
+                        if (patch.Moved == null)
+                        {
+                            patch.Moved = new List<int>();
+                        }
+
+                        patch.Moved.Add(stripe.Id);
+                    }
+                }
+
                 if (patch.Remove)
                 {
                     _context.Remove(stripe);
                 }
+
+                _context.SaveChanges();
             }
-            
-            _context.SaveChanges();
 
             return Ok(patch);
         }
