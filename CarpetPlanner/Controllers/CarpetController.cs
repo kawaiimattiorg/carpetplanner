@@ -65,11 +65,17 @@
                 return NotFound();
             }
 
+            var maxOrdinal = _context
+                .Stripes
+                .Where(entity => entity.CarpetId == id)
+                .Max(entity => entity.Ordinal);
+
             var stripe = new StripeEntity
             {
                 CarpetId = id,
                 ColorString = StripeEntity.DefaultColor,
-                Height = 10.0
+                Height = 10.0,
+                Ordinal = maxOrdinal + 1
             };
 
             _context

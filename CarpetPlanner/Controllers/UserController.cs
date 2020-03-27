@@ -181,7 +181,7 @@
                 title.SetFontSize(36);
                 title.SetMultipliedLeading(1.0f);
                 document.Add(title);
-                
+
                 // add carpet information
                 var stripeTotalLength = stripes.Sum(stripe => stripe.Height);
                 var info = new Paragraph($"Leveys {carpet.Width} cm, pituus {stripeTotalLength} cm.");
