@@ -194,9 +194,15 @@
                     .GetCurrentArea()
                     .GetBBox();
 
+                var bottomMargin = document.GetBottomMargin();
                 var leftMargin = document.GetLeftMargin();
 
-                currentArea.ApplyMargins(0, document.GetRightMargin(), 0, leftMargin, false);
+                currentArea.ApplyMargins(
+                    0,
+                    document.GetRightMargin(),
+                    bottomMargin,
+                    leftMargin,
+                    false);
 
                 // calculate cm to pixel conversion factor
                 var totalHeight = currentArea.GetHeight();
@@ -225,7 +231,7 @@
                 // print stripes
                 var canvas = new PdfCanvas(pdf.GetFirstPage());
 
-                var start = (double) totalHeight;
+                var start = (double) totalHeight + bottomMargin;
 
                 foreach (var stripe in stripes)
                 {
