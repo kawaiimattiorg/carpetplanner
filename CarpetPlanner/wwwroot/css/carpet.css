@@ -6,6 +6,7 @@
 
 #menu {
     left: 1%;
+    overflow: auto;
     width: 15%;
 }
 
@@ -15,6 +16,7 @@
     width: 100%;
 }
 
+#menu > a + button,
 #menu > button + button,
 #menu > button + a {
     margin-top: 24px;

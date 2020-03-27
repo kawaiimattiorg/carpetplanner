@@ -20,6 +20,7 @@
 
 <div id="menu">
     <h2>Valikko</h2>
+    <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="GetCarpetPdf" asp-route-username="@Model.Username" asp-route-id="@Model.Carpet.Id" target="_blank">Avaa PDF</a>
     <button id="new-stripe" class="btn btn-primary">Lisää raita</button>
     <button id="change-height" class="btn btn-primary">Muuta pituutta</button>
     <button id="move-up" data-move-direction="-1" class="btn btn-primary">Siirrä ylöspäin</button>

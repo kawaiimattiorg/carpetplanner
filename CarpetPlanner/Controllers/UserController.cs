@@ -1,7 +1,14 @@
 ﻿namespace CarpetPlanner.Controllers
 {
     using System;
+    using System.IO;
     using System.Linq;
+    using iText.Kernel.Colors;
+    using iText.Kernel.Geom;
+    using iText.Kernel.Pdf;
+    using iText.Kernel.Pdf.Canvas;
+    using iText.Layout;
+    using iText.Layout.Element;
     using Microsoft.AspNetCore.Mvc;
     using Models;
 
@@ -10,6 +17,11 @@
     /// </summary>
     public class UserController : Controller
     {
+        /// <summary>
+        /// Maximum percent of width that should be used for stripes.
+        /// </summary>
+        private const double PdfMaxStripeWidth = 0.8;
+
         /// <summary>
         /// Database handle.
         /// </summary>
@@ -79,14 +91,14 @@
                 .Carpets
                 .Where(carpet => carpet.Username == username && !carpet.Removed)
                 .ToList();
-            
+
             var selectedCarpet = carpets.FirstOrDefault(carpet => carpet.Id == id);
 
             if (selectedCarpet == null)
             {
                 throw new Exception("Carpet not found");
             }
-            
+
             var stripes = _context
                 .Stripes
                 .Where(stripe => stripe.CarpetId == id)
@@ -123,6 +135,129 @@
             };
 
             return View("Carpet", data);
+        }
+
+        /// <summary>
+        /// Open pdf version of the carpet.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        [Route("/pdf/{username}/{id}")]
+        public IActionResult GetCarpetPdf(string username, int id)
+        {
+            var carpet = _context
+                .Carpets
+                .FirstOrDefault(entity => entity.Id == id && entity.Username == username && !entity.Removed);
+
+            if (carpet == null)
+            {
+                return NotFound();
+            }
+
+            var stripes = _context
+                .Stripes
+                .Where(stripe => stripe.CarpetId == id)
+                .OrderBy(stripe => stripe.Ordinal)
+                .ToList();
+
+            var colors = _context
+                .Colors
+                .ToList()
+                .ToDictionary(color => color.Id, color => color.Rgb);
+
+            colors.Add(0, StripeEntity.DefaultColor.Substring(1));
+
+            using (var ms = new MemoryStream())
+            {
+                var props = new WriterProperties();
+
+                var pdf = new PdfDocument(new PdfWriter(ms, props));
+                var document = new Document(pdf, PageSize.A4, true);
+
+                // add carpet title
+                var title = new Paragraph(carpet.Name);
+                title.SetFontSize(36);
+                title.SetMultipliedLeading(1.0f);
+                document.Add(title);
+                
+                // add carpet information
+                var stripeTotalLength = stripes.Sum(stripe => stripe.Height);
+                var info = new Paragraph($"Leveys {carpet.Width} cm, pituus {stripeTotalLength} cm.");
+                info.SetMultipliedLeading(1.0f);
+                document.Add(info);
+
+                // calculate the area that should be used for the carpet stripes
+                var currentArea = document
+                    .GetRenderer()
+                    .GetCurrentArea()
+                    .GetBBox();
+
+                var leftMargin = document.GetLeftMargin();
+
+                currentArea.ApplyMargins(0, document.GetRightMargin(), 0, leftMargin, false);
+
+                // calculate cm to pixel conversion factor
+                var totalHeight = currentArea.GetHeight();
+                var totalWidth = currentArea.GetWidth();
+
+                var maxStripeWidth = PdfMaxStripeWidth * totalWidth;
+                var pdfRatio = maxStripeWidth / totalHeight;
+
+                var stripeRatio = carpet.Width / stripeTotalLength;
+
+                var tooHigh = pdfRatio > stripeRatio;
+
+                double cmToPx, width;
+
+                if (tooHigh)
+                {
+                    cmToPx = totalHeight / stripeTotalLength;
+                    width = carpet.Width * cmToPx;
+                }
+                else
+                {
+                    cmToPx = maxStripeWidth / carpet.Width;
+                    width = maxStripeWidth;
+                }
+
+                // print stripes
+                var canvas = new PdfCanvas(pdf.GetFirstPage());
+
+                var start = (double) totalHeight;
+
+                foreach (var stripe in stripes)
+                {
+                    var height = stripe.Height * cmToPx;
+                    start -= height;
+
+                    canvas
+                        .SetColor(ColorFromRgb(colors[stripe.Color]), true)
+                        .Rectangle(leftMargin, (float) start, (float) width, (float) height)
+                        .Fill();
+                }
+
+                document.Close();
+
+                return File(ms.ToArray(), "application/pdf");
+            }
+        }
+
+        /// <summary>
+        /// Convert RGB string to Color object.
+        /// </summary>
+        /// <param name="rgb"></param>
+        /// <returns></returns>
+        private static Color ColorFromRgb(string rgb)
+        {
+            const float max = 255f;
+
+            var r = Convert.ToUInt32(rgb.Substring(0, 2), 16) / max;
+            var g = Convert.ToUInt32(rgb.Substring(2, 2), 16) / max;
+            var b = Convert.ToUInt32(rgb.Substring(4, 2), 16) / max;
+
+            return new DeviceRgb(r, g, b);
         }
     }
 }
