@@ -253,11 +253,19 @@
                         .Fill();
 
                     // add stripe info box
+                    var infoHeight = (float) height - 2 * PdfInfoBorderThickness;
+                    
                     var stripeInfo = new Paragraph($"{stripe.Height} cm")
                         .SetFontColor(ColorConstants.BLACK)
                         .SetFixedPosition(leftMargin + (float) width, (float) start + PdfInfoBorderThickness, infoWidth)
                         .SetBorder(new SolidBorder(PdfInfoBorderThickness))
-                        .SetHeight((float) height - 2 * PdfInfoBorderThickness);
+                        .SetHeight(infoHeight);
+
+                    if (infoHeight < 12)
+                    {
+                        stripeInfo.SetFontSize((float) Math.Ceiling(infoHeight - 2f));
+                    }
+                    
                     document.Add(stripeInfo);
                 }
 
