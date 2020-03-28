@@ -64,18 +64,19 @@
             {
                 return NotFound();
             }
-
-            var maxOrdinal = _context
+            
+            var lastStripe = _context
                 .Stripes
                 .Where(entity => entity.CarpetId == id)
-                .Max(entity => entity.Ordinal);
+                .OrderByDescending(entity => entity.Ordinal)
+                .FirstOrDefault();
 
             var stripe = new StripeEntity
             {
                 CarpetId = id,
                 ColorString = StripeEntity.DefaultColor,
                 Height = 10.0,
-                Ordinal = maxOrdinal + 1
+                Ordinal = lastStripe?.Ordinal + 1 ?? 0
             };
 
             _context
