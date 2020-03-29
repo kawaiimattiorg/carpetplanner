@@ -320,8 +320,4 @@ function updateStripeSizes() {
             $this.css('height', parseInt($this.data('stripeHeight')) * cmToPixel + 'px');
         });
     }
-
-    console.log('ui ratio:' + uiRatio);
-    console.log('carpet ratio:' + carpetRatio);
-    console.log('ui height cm:' + uiHeightCm);
 }
