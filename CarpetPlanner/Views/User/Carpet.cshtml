@@ -51,13 +51,9 @@
         @foreach (var stripe in Model.Carpet.Stripes)
         {
             <div data-stripe-id="@stripe.Id" data-stripe-height="@stripe.Height">
-                <div class="stripe-selection">
-                    <p></p>
-                </div>
+                <div class="stripe-selection"><span></span></div>
                 <div class="stripe-element" style="background-color: @stripe.ColorString"></div>
-                <div class="stripe-height">
-                    <p>@stripe.Height</p>
-                </div>
+                <div class="stripe-height">@stripe.Height</div>
             </div>
         }
     </div>

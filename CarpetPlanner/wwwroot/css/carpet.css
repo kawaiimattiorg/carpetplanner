@@ -62,23 +62,19 @@
 }
 
 #carpet > div > div.stripe-selection {
+    align-items: center;
+    display: flex;
     width: 32px;
 }
 
 #carpet > div > div.stripe-height {
+    align-items: center;
+    display: flex;
+    padding-left: 5px;
     width: 48px;
 }
 
-#carpet > div > div.stripe-height > p {
-    margin: 0 0 0 5px;
-    width: 48px;
-}
-
-#carpet > div.active > div.stripe-selection > p {
-    text-align: center;
-}
-
-#carpet > div.active > div.stripe-selection > p::after {
+#carpet > div.active > div.stripe-selection > span::after {
     content: "\e013";
     font-family: glyphicon;
 }

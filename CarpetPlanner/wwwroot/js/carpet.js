@@ -183,7 +183,7 @@ function initializePostStripe() {
                     html: [
                         $('<div>', {
                             'class': 'stripe-selection',
-                            html: $('<p>')
+                            html: $('<span>')
                         }),
                         $('<div>', {
                             'class': 'stripe-element',
@@ -193,7 +193,7 @@ function initializePostStripe() {
                         }),
                         $('<div>', {
                             'class': 'stripe-height',
-                            html: $('<p>', {
+                            html: $('<span>', {
                                 text: data.height
                             })
                         })]
