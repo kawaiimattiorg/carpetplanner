@@ -64,6 +64,7 @@
 #carpet > div > div.stripe-selection {
     align-items: center;
     display: flex;
+    padding-right: 5px;
     width: 32px;
 }
 
@@ -72,6 +73,11 @@
     display: flex;
     padding-left: 5px;
     width: 48px;
+}
+
+#carpet > div.active > div.stripe-selection > span {
+    text-align: right;
+    width: 100%;
 }
 
 #carpet > div.active > div.stripe-selection > span::after {
