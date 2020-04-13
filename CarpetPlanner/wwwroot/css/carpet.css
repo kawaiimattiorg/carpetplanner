@@ -75,7 +75,7 @@
 }
 
 #carpet > div.active > div.stripe-selection > span::after {
-    content: "\e013";
+    content: "\e092";
     font-family: glyphicon;
 }
 
