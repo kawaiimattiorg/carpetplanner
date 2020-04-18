@@ -220,7 +220,7 @@ function performStripePatch(data) {
 
                 if (response.height !== null) {
                     $stripe.data('stripeHeight', response.height);
-                    $stripe.children('.stripe-height').children('p').text(response.height);
+                    $stripe.children('.stripe-height').text(response.height);
                 }
 
                 if (response.rgb !== null) {
