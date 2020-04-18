@@ -8,7 +8,6 @@
     using iText.Kernel.Pdf;
     using iText.Kernel.Pdf.Canvas;
     using iText.Layout;
-    using iText.Layout.Borders;
     using iText.Layout.Element;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -22,11 +21,6 @@
         /// Maximum percent of width that should be used for stripes.
         /// </summary>
         private const double PdfMaxStripeWidth = 0.8;
-
-        /// <summary>
-        /// Stripe info box border thickness in pixels.
-        /// </summary>
-        private const float PdfInfoBorderThickness = 1f;
 
         /// <summary>
         /// Database handle.
@@ -234,7 +228,7 @@
                     width = maxStripeWidth;
                 }
 
-                var infoWidth = (float) (totalWidth - width + 2 * leftMargin - PdfInfoBorderThickness);
+                var infoWidth = (float) (totalWidth - width + 2 * leftMargin);
 
                 // print stripes
                 var canvas = new PdfCanvas(pdf.GetFirstPage());
@@ -251,19 +245,18 @@
                         .SetColor(ColorFromRgb(colors[stripe.Color]), true)
                         .Rectangle(leftMargin, (float) start, (float) width, (float) height)
                         .Fill();
-
-                    // add stripe info box
-                    var infoHeight = (float) height - 2 * PdfInfoBorderThickness;
                     
+                    // add stripe info box
                     var stripeInfo = new Paragraph($"{stripe.Height} cm")
                         .SetFontColor(ColorConstants.BLACK)
-                        .SetFixedPosition(leftMargin + (float) width, (float) start + PdfInfoBorderThickness, infoWidth)
-                        .SetBorder(new SolidBorder(PdfInfoBorderThickness))
-                        .SetHeight(infoHeight);
-
-                    if (infoHeight < 12)
+                        .SetFixedPosition(leftMargin + (float) width, (float) start, infoWidth)
+                        .SetHeight((float)height);
+                    
+                    // TODO: SETFONTSIZE ON VARMAANKIN PT, MUT HEIGHT ON PX??
+                    
+                    if (height < 12)
                     {
-                        stripeInfo.SetFontSize((float) Math.Ceiling(infoHeight - 2f));
+                        stripeInfo.SetFontSize((float) Math.Ceiling(height - 2f));
                     }
                     
                     document.Add(stripeInfo);
