@@ -23,6 +23,21 @@
         private const double PdfMaxStripeWidth = 0.8;
 
         /// <summary>
+        /// Maximum height that should trigger indent next level of stripe height.
+        /// </summary>
+        private const double PdfIntendNextLimit = 12.0;
+
+        /// <summary>
+        /// Maximum number of indentations levels.
+        /// </summary>
+        private const int PdfMaxIntendLevels = 1;
+
+        /// <summary>
+        /// Number of dash characters in order to intend.
+        /// </summary>
+        private const int PdfIntendNumberOfDashes = 9;
+
+        /// <summary>
         /// Database handle.
         /// </summary>
         private readonly CarpetDataContext _context;
@@ -194,6 +209,8 @@
                     .GetCurrentArea()
                     .GetBBox();
 
+                //document.SetTextRenderingMode(PdfCanvasConstants.TextRenderingMode.CLIP);
+
                 var bottomMargin = document.GetBottomMargin();
                 var leftMargin = document.GetLeftMargin();
 
@@ -235,31 +252,26 @@
 
                 var start = (double) totalHeight + bottomMargin;
 
+                var intend = 0;
+                
                 foreach (var stripe in stripes)
                 {
                     var height = stripe.Height * cmToPx;
                     start -= height;
 
-                    // draw stripe
                     canvas
                         .SetColor(ColorFromRgb(colors[stripe.Color]), true)
                         .Rectangle(leftMargin, (float) start, (float) width, (float) height)
                         .Fill();
-                    
-                    // add stripe info box
-                    var stripeInfo = new Paragraph($"{stripe.Height} cm")
+
+                    document.Add(new Paragraph($"{new string('-', intend * PdfIntendNumberOfDashes)}{stripe.Height} cm")
                         .SetFontColor(ColorConstants.BLACK)
                         .SetFixedPosition(leftMargin + (float) width, (float) start, infoWidth)
-                        .SetHeight((float)height);
-                    
-                    // TODO: SETFONTSIZE ON VARMAANKIN PT, MUT HEIGHT ON PX??
-                    
-                    if (height < 12)
-                    {
-                        stripeInfo.SetFontSize((float) Math.Ceiling(height - 2f));
-                    }
-                    
-                    document.Add(stripeInfo);
+                        .SetHeight((float) height));
+
+                    intend = height < PdfIntendNextLimit && intend < PdfMaxIntendLevels
+                        ? intend + 1
+                        : 0;
                 }
 
                 document.Close();
