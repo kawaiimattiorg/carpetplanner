@@ -1,16 +1,13 @@
 ﻿namespace CarpetPlanner.Controllers
 {
     using System;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
-    using iText.Kernel.Colors;
-    using iText.Kernel.Geom;
-    using iText.Kernel.Pdf;
-    using iText.Kernel.Pdf.Canvas;
-    using iText.Layout;
-    using iText.Layout.Element;
     using Microsoft.AspNetCore.Mvc;
     using Models;
+    using Spire.Pdf;
+    using Spire.Pdf.Graphics;
 
     /// <summary>
     /// Controller for different 
@@ -23,19 +20,9 @@
         private const double PdfMaxStripeWidth = 0.8;
 
         /// <summary>
-        /// Maximum height that should trigger indent next level of stripe height.
+        /// Height reserved for header information.
         /// </summary>
-        private const double PdfIntendNextLimit = 12.0;
-
-        /// <summary>
-        /// Maximum number of indentations levels.
-        /// </summary>
-        private const int PdfMaxIntendLevels = 1;
-
-        /// <summary>
-        /// Number of dash characters in order to intend.
-        /// </summary>
-        private const int PdfIntendNumberOfDashes = 9;
+        private const double PdfHeaderHeight = 100.0;
 
         /// <summary>
         /// Database handle.
@@ -184,59 +171,43 @@
 
             colors.Add(0, StripeEntity.DefaultColor.Substring(1));
 
+            var pdf = new PdfDocument();
+            var page = pdf.Pages.Add();
+
             using (var ms = new MemoryStream())
             {
-                var props = new WriterProperties();
-
-                var pdf = new PdfDocument(new PdfWriter(ms, props));
-                var document = new Document(pdf, PageSize.A4, true);
-
                 // add carpet title
-                var title = new Paragraph(carpet.Name);
-                title.SetFontSize(36);
-                title.SetMultipliedLeading(1.0f);
-                document.Add(title);
+                page.Canvas.DrawString(
+                    carpet.Name,
+                    new PdfFont(PdfFontFamily.Helvetica, 32f),
+                    PdfBrushes.Black,
+                    new PointF(0, 0));
 
                 // add carpet information
                 var stripeTotalLength = stripes.Sum(stripe => stripe.Height);
-                var info = new Paragraph($"Leveys {carpet.Width} cm, pituus {stripeTotalLength} cm.");
-                info.SetMultipliedLeading(1.0f);
-                document.Add(info);
+
+                page.Canvas.DrawString(
+                    $"Leveys {carpet.Width} cm, pituus {stripeTotalLength} cm.",
+                    new PdfFont(PdfFontFamily.Helvetica, 16f),
+                    PdfBrushes.Black,
+                    new PointF(0, 50));
 
                 // calculate the area that should be used for the carpet stripes
-                var currentArea = document
-                    .GetRenderer()
-                    .GetCurrentArea()
-                    .GetBBox();
-
-                //document.SetTextRenderingMode(PdfCanvasConstants.TextRenderingMode.CLIP);
-
-                var bottomMargin = document.GetBottomMargin();
-                var leftMargin = document.GetLeftMargin();
-
-                currentArea.ApplyMargins(
-                    0,
-                    document.GetRightMargin(),
-                    bottomMargin,
-                    leftMargin,
-                    false);
+                var currentArea = new SizeF(
+                    page.Canvas.ClientSize.Width,
+                    page.Canvas.ClientSize.Height - (float)PdfHeaderHeight);
 
                 // calculate cm to pixel conversion factor
-                var totalHeight = currentArea.GetHeight();
-                var totalWidth = currentArea.GetWidth();
-
-                var maxStripeWidth = PdfMaxStripeWidth * totalWidth;
-                var pdfRatio = maxStripeWidth / totalHeight;
-
+                var maxStripeWidth = PdfMaxStripeWidth * currentArea.Width;
+                var pdfRatio = maxStripeWidth / currentArea.Height;
                 var stripeRatio = carpet.Width / stripeTotalLength;
-
                 var tooHigh = pdfRatio > stripeRatio;
 
                 double cmToPx, width;
 
                 if (tooHigh)
                 {
-                    cmToPx = totalHeight / stripeTotalLength;
+                    cmToPx = currentArea.Height / stripeTotalLength;
                     width = carpet.Width * cmToPx;
                 }
                 else
@@ -245,37 +216,36 @@
                     width = maxStripeWidth;
                 }
 
-                var infoWidth = (float) (totalWidth - width + 2 * leftMargin);
-
                 // print stripes
-                var canvas = new PdfCanvas(pdf.GetFirstPage());
+                var start = PdfHeaderHeight;
 
-                var start = (double) totalHeight + bottomMargin;
-
-                var intend = 0;
-                
                 foreach (var stripe in stripes)
                 {
                     var height = stripe.Height * cmToPx;
-                    start -= height;
+                    
+                    page.Canvas.DrawRectangle(
+                        new PdfSolidBrush(ColorFromRgb(colors[stripe.Color])),
+                        0f,
+                        (float) start,
+                        (float) width,
+                        (float) height);
 
-                    canvas
-                        .SetColor(ColorFromRgb(colors[stripe.Color]), true)
-                        .Rectangle(leftMargin, (float) start, (float) width, (float) height)
-                        .Fill();
+                    // find vertical center for info text 
+                    var infoStart = start + 0.5 * height - 7.0;
 
-                    document.Add(new Paragraph($"{new string('-', intend * PdfIntendNumberOfDashes)}{stripe.Height} cm")
-                        .SetFontColor(ColorConstants.BLACK)
-                        .SetFixedPosition(leftMargin + (float) width, (float) start, infoWidth)
-                        .SetHeight((float) height));
-
-                    intend = height < PdfIntendNextLimit && intend < PdfMaxIntendLevels
-                        ? intend + 1
-                        : 0;
+                    page.Canvas.DrawString(
+                        $"{stripe.Height} cm",
+                        new PdfFont(PdfFontFamily.Helvetica, 12f),
+                        PdfBrushes.Black,
+                        new PointF((float) (width + 5.0), (float) infoStart));
+                    
+                    start += height;
                 }
 
-                document.Close();
+                // Save pdf to stream
+                pdf.SaveToStream(ms);
 
+                // Send bytes to client as file
                 return File(ms.ToArray(), "application/pdf");
             }
         }
@@ -287,13 +257,10 @@
         /// <returns></returns>
         private static Color ColorFromRgb(string rgb)
         {
-            const float max = 255f;
-
-            var r = Convert.ToUInt32(rgb.Substring(0, 2), 16) / max;
-            var g = Convert.ToUInt32(rgb.Substring(2, 2), 16) / max;
-            var b = Convert.ToUInt32(rgb.Substring(4, 2), 16) / max;
-
-            return new DeviceRgb(r, g, b);
+            return Color.FromArgb(
+                Convert.ToInt32(rgb.Substring(0, 2), 16),
+                Convert.ToInt32(rgb.Substring(2, 2), 16),
+                Convert.ToInt32(rgb.Substring(4, 2), 16));
         }
     }
 }
