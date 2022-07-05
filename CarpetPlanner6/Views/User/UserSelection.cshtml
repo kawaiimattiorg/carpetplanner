@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model CarpetPlanner6.Models.UserSelectionViewModel
+@{
+    ViewData["Title"] = "User selection";
+}
+
+@section Styles
+{
+
+    <link rel="stylesheet" href="~/css/user-selection.css"/>
+}
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/user-selection.js"></script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Valitse käyttäjä</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-8">
+            <input type="text" class="form-control" id="username" placeholder="Käyttäjätunnus">
+        </div>
+
+        <div class="col-12 col-sm-4">
+            <button type="button" id="confirm" class="btn btn-primary">Luo uusi käyttäjä</button>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var username in Model.Usernames)
+        {
+            <div class="col-12 col-sm-3">
+                <a class="btn btn-info" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@username">@username</a>
+            </div>
+        }
+    </div>
+
+</div>

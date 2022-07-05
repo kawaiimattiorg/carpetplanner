@@ -1,0 +1,69 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model CarpetPlanner6.Models.CarpetViewModel
+
+@{
+    ViewData["Title"] = "";
+}
+
+@section Styles
+{
+
+    <link rel="stylesheet" href="~/css/carpet.css"/>
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/carpet.js"></script>
+}
+
+<input type="hidden" id="username" value="@Model.Username"/>
+<input type="hidden" id="carpet-id" value="@Model.Carpet.Id"/>
+
+<div id="menu">
+    <h2>Valikko</h2>
+    <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="GetCarpetPdf" asp-route-username="@Model.Username" asp-route-id="@Model.Carpet.Id" target="_blank">Avaa PDF</a>
+    <button id="new-stripe" class="btn btn-primary">Lisää raita</button>
+    <button id="change-height" class="btn btn-primary">Muuta pituutta</button>
+    <button id="move-up" data-move-direction="-1" class="btn btn-primary">Siirrä ylöspäin</button>
+    <button id="move-down" data-move-direction="1" class="btn btn-primary">Siirrä alaspäin</button>
+    <button id="change-width" class="btn btn-primary">Muuta leveyttä</button>
+    <button id="change-name" class="btn btn-primary">Muuta nimeä</button>
+    <button id="delete-stripes" class="btn btn-danger">Poista raidat</button>
+    <a class="btn btn-secondary" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@Model.Username">Valitse matto</a>
+
+    <hr/>
+
+    <h2 id="width">Leveys:</h2>
+    <h2>
+        <p id="width-value">@Model.Carpet.Width</p>
+    </h2>
+
+    <hr/>
+
+    <h2>Pituus:</h2>
+    <h2>
+        <p id="height-value">@Model.Carpet.Stripes.Sum(stripe => (int)stripe.Height)</p>
+    </h2>
+</div>
+
+<div id="main">
+    <h2 id="name">@Model.Carpet.Name</h2>
+    <div id="carpet">
+        @foreach (var stripe in Model.Carpet.Stripes)
+        {
+            <div data-stripe-id="@stripe.Id" data-stripe-height="@stripe.Height">
+                <div class="stripe-selection"><span></span></div>
+                <div class="stripe-element" style="background-color: @stripe.ColorString"></div>
+                <div class="stripe-height">@stripe.Height</div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="edit">
+    <h2>Muuta väriä</h2>
+    @foreach (var color in Model.Colors)
+    {
+        <div data-color-id="@color.Id" style="background-color: #@color.Rgb"></div>
+    }
+</div>
