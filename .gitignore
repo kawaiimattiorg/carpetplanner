@@ -1,3 +1,4 @@
 CarpetPlanner*/bin/
 obj/
 .idea/
+*.DotSettings.user
