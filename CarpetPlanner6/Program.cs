@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var sqliteConnectionString = $"Data Source={Path.Join(builder.Configuration["SQLITEROOT"], "carpetplanner.sqlite")}";
+var sqliteConnectionString = $"Data Source={Path.Join(builder.Configuration["SQLITE_ROOT"], "carpetplanner.sqlite")}";
 builder.Services.AddDbContext<CarpetDataContext>(options => options.UseSqlite(sqliteConnectionString));
 
 // Add services to the container.

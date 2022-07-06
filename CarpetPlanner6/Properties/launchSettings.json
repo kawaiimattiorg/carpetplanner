@@ -14,8 +14,7 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "SQLITEROOT": "C:\\Users\\Matti\\SQLite"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {
