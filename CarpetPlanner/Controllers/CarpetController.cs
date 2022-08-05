@@ -1,4 +1,4 @@
-﻿namespace CarpetPlanner6.Controllers
+﻿namespace CarpetPlanner.Controllers
 {
     using System;
     using System.Collections.Generic;

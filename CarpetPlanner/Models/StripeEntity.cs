@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CarpetPlanner6.Models
+namespace CarpetPlanner.Models
 {
     /// <summary>
     /// StripeEntity

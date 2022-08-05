@@ -1,4 +1,4 @@
-using CarpetPlanner6.Models;
+using CarpetPlanner.Models;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 

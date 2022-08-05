@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CarpetPlanner6.Models
+namespace CarpetPlanner.Models
 {
     public class UserSelectionViewModel
     {

@@ -1,4 +1,4 @@
-namespace CarpetPlanner6.Models;
+namespace CarpetPlanner.Models;
 
 public class ErrorViewModel
 {

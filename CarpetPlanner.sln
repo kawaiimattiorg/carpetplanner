@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetPlanner6", "CarpetPlanner6\CarpetPlanner6.csproj", "{70216A6D-DC82-46D6-80E5-5DCE2E6453C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetPlanner", "CarpetPlanner\CarpetPlanner.csproj", "{70216A6D-DC82-46D6-80E5-5DCE2E6453C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetMigrator", "CarpetMigrator\CarpetMigrator.csproj", "{49AA15FC-AD7D-4373-9F2C-EFE9A6217069}"
 EndProject

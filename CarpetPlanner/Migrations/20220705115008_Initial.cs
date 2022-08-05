@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CarpetPlanner6.Migrations
+namespace CarpetPlanner.Migrations
 {
     public partial class Initial : Migration
     {
