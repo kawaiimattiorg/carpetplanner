@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetPlanner", "CarpetPlan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetMigrator", "CarpetMigrator\CarpetMigrator.csproj", "{49AA15FC-AD7D-4373-9F2C-EFE9A6217069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetPlannerB2c", "CarpetPlannerB2c\CarpetPlannerB2c.csproj", "{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{49AA15FC-AD7D-4373-9F2C-EFE9A6217069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49AA15FC-AD7D-4373-9F2C-EFE9A6217069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49AA15FC-AD7D-4373-9F2C-EFE9A6217069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
