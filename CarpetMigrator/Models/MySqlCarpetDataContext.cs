@@ -6,14 +6,14 @@
     public class MySqlCarpetDataContext : DbContext
     {
         private string Host { get; set; }
-        private string Database { get; set; }
+        private string DatabaseName { get; set; }
         private string User { get; set; }
         private string Password { get; set; }
 
-        public MySqlCarpetDataContext(string host, string database, string user, string password)
+        public MySqlCarpetDataContext(string host, string databaseName, string user, string password)
         {
             Host = host;
-            Database = database;
+            DatabaseName = databaseName;
             User = user;
             Password = password;
         }
@@ -23,7 +23,7 @@
             var connectionStringBuilder = new MySqlConnectionStringBuilder
             {
                 Server = Host,
-                Database = Database,
+                Database = DatabaseName,
                 UserID = User,
                 Password = Password
             };
