@@ -3,12 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
 
     /// <summary>
     /// Controller for carpet editing related requests.
     /// </summary>
+    [Authorize]
     public class CarpetController : Controller
     {
         /// <summary>

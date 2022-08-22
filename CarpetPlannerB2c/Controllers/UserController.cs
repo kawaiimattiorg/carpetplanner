@@ -4,6 +4,7 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Spire.Pdf;
@@ -12,6 +13,7 @@
     /// <summary>
     /// Controller for different
     /// </summary>
+    [Authorize]
     public class UserController : Controller
     {
         /// <summary>
