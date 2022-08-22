@@ -6,6 +6,7 @@
     using System.Linq;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Identity.Web;
     using Models;
     using Spire.Pdf;
     using Spire.Pdf.Graphics;
@@ -44,7 +45,7 @@
         /// View for selecting user.
         /// </summary>
         /// <returns></returns>
-        [Route("")]
+        [Route("/user")]
         public IActionResult GetUsers()
         {
             var data = new UserSelectionViewModel
@@ -58,6 +59,28 @@
             };
 
             return View("UserSelection", data);
+        }
+
+        /// <summary>
+        /// View for selecting carpet to edit.
+        /// </summary>
+        /// <returns></returns>
+        [Route("")]
+        public IActionResult GetUserCarpets()
+        {
+            var objectId = User.GetObjectId() ?? "";
+
+            var data = new CarpetSelectionViewModel
+            {
+                Username = objectId,
+                Carpets = _context
+                    .Carpets
+                    .Where(carpet => carpet.Owner == objectId && !carpet.Removed)
+                    .OrderBy(carpet => carpet.Name)
+                    .ToList()
+            };
+
+            return View("CarpetSelection", data);
         }
 
         /// <summary>
