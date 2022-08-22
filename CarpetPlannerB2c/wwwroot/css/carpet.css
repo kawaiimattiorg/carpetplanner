@@ -1,0 +1,93 @@
+#menu, #main, #edit {
+    position: absolute;
+    top: 1%;
+    bottom: 1%;
+}
+
+#menu {
+    left: 1%;
+    overflow: auto;
+    width: 15%;
+}
+
+#menu > button,
+#menu a {
+    display: block;
+    width: 100%;
+}
+
+#menu > a + button,
+#menu > button + button,
+#menu > button + a {
+    margin-top: 24px;
+}
+
+#main {
+    left: 17%;
+    width: 51%;
+}
+
+#name {
+    padding-left: 32px;
+}
+
+#edit {
+    left: 69%;
+    overflow: auto;
+    width: 30%;
+}
+
+#carpet {
+    height: calc(99% - 38px);
+    position: relative;
+}
+
+#carpet > div {
+    height: 15px;
+}
+
+#carpet > div > div.stripe-element {
+    width: calc(100% - 80px);
+}
+
+@font-face {
+    font-family: glyphicon;
+    src: url('../fonts/glyphicons-halflings-regular.ttf');
+}
+
+#carpet > div > div {
+    display: inline-block;
+    float: left;
+    height: 100%;
+}
+
+#carpet > div > div.stripe-selection {
+    align-items: center;
+    display: flex;
+    padding-right: 5px;
+    width: 32px;
+}
+
+#carpet > div > div.stripe-height {
+    align-items: center;
+    display: flex;
+    padding-left: 5px;
+    width: 48px;
+}
+
+#carpet > div.active > div.stripe-selection > span {
+    text-align: right;
+    width: 100%;
+}
+
+#carpet > div.active > div.stripe-selection > span::after {
+    content: "\e092";
+    font-family: glyphicon;
+}
+
+#edit > div[data-color-id] {
+    display: inline-block;
+    float: left;
+    height: 9%;
+    width: 33.3%;
+}
