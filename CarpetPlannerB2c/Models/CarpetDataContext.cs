@@ -30,6 +30,11 @@
         /// <summary>
         ///
         /// </summary>
+        public DbSet<AliasEntity> Aliases { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
         public DbSet<CarpetEntity> Carpets { get; set; }
 
         /// <summary>
