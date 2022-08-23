@@ -7,7 +7,7 @@
         /// <summary>
         /// Current user username.
         /// </summary>
-        public string Username { get; set; }
+        public string Alias { get; set; }
 
         /// <summary>
         /// All current user carpets.

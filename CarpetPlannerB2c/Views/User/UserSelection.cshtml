@@ -10,10 +10,6 @@
     <link rel="stylesheet" href="~/css/user-selection.css"/>
 }
 
-@section Scripts {
-    <script type="text/javascript" src="~/js/user-selection.js"></script>
-}
-
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -22,20 +18,16 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-sm-8">
-            <input type="text" class="form-control" id="username" placeholder="Käyttäjätunnus">
-        </div>
-
-        <div class="col-12 col-sm-4">
-            <button type="button" id="confirm" class="btn btn-primary">Luo uusi käyttäjä</button>
+        <div class="col-12">
+            <a href="/" class="btn btn-primary">Omat matot</a>
         </div>
     </div>
 
     <div class="row">
-        @foreach (var username in Model.Usernames)
+        @foreach (var alias in Model.Aliases)
         {
             <div class="col-12 col-sm-3">
-                <a class="btn btn-info" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-username="@username">@username</a>
+                <a class="btn btn-info" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-alias="@alias">@alias</a>
             </div>
         }
     </div>

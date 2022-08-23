@@ -15,12 +15,6 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Username
-        /// </summary>
-        [JsonProperty(PropertyName = "username")]
-        public string Username { get; set; }
-
-        /// <summary>
         /// ObjectId of the user who has created the carpet
         /// </summary>
         public string Owner { get; set; }

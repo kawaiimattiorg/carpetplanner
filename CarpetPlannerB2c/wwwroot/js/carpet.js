@@ -1,9 +1,7 @@
 let carpetId;
-let username;
 
 $(document).ready(function () {
     carpetId = parseInt($('#carpet-id').val());
-    username = $('#username').val();
 
     initializeCarpetNameChange();
     initializeCarpetWidthChange();
@@ -39,7 +37,7 @@ function initializeCarpetNameChange() {
         }
 
         $.ajax({
-            url: '/carpet/' + username + '/' + carpetId,
+            url: '/carpet/' + carpetId,
             method: 'PATCH',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -62,7 +60,7 @@ function initializeCarpetWidthChange() {
         }
 
         $.ajax({
-            url: '/carpet/' + username + '/' + carpetId,
+            url: '/carpet/' + carpetId,
             method: 'PATCH',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -172,7 +170,7 @@ function initializePostStripe() {
 
     $('#new-stripe').click(function () {
         $.ajax({
-            url: '/carpet/' + username + '/' + carpetId,
+            url: '/carpet/' + carpetId,
             method: 'POST',
             success: function (data) {
                 $('#carpet').append($('<div>', {
@@ -208,7 +206,7 @@ function initializePostStripe() {
 
 function performStripePatch(data) {
     $.ajax({
-        url: '/stripe/' + username + '/' + carpetId,
+        url: '/stripe/' + carpetId,
         method: 'PATCH',
         contentType: 'application/json',
         data: JSON.stringify(data),

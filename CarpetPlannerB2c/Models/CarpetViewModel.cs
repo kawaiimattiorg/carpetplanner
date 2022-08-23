@@ -10,7 +10,7 @@ namespace CarpetPlannerB2c.Models
         /// <summary>
         /// Current username.
         /// </summary>
-        public string Username { get; set; }
+        public string Alias { get; set; }
 
         /// <summary>
         /// Current carpet with stripes.

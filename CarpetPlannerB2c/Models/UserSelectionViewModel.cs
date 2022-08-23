@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace CarpetPlannerB2c.Models
+﻿namespace CarpetPlannerB2c.Models
 {
     public class UserSelectionViewModel
     {
-        public IList<string> Usernames { get; set; }
+        public IList<string> Aliases { get; set; }
     }
 }

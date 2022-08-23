@@ -15,8 +15,6 @@
     <script type="text/javascript" src="~/js/carpet-selection.js"></script>
 }
 
-<input type="hidden" id="username" value="@Model.Username"/>
-
 <div class="container">
 
     <div class="row">
@@ -26,11 +24,14 @@
     </div>
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <button type="button" id="new-carpet" class="btn btn-primary">Luo uusi matto</button>
         </div>
-        <div class="col-6">
-            <a type="button" id="user-selection" href="/" class="btn btn-secondary">Valitse käyttäjä</a>
+        <div class="col-4">
+            <a type="button" id="user-selection" asp-area="" asp-controller="User" asp-action="GetUsers" class="btn btn-secondary">Valitse käyttäjä</a>
+        </div>
+        <div class="col-4">
+            <a id="sign-out" class="btn btn-danger" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Kirjaudu ulos</a>
         </div>
     </div>
 
@@ -38,7 +39,7 @@
         @foreach (var carpet in Model.Carpets)
         {
             <div class="col-12 col-sm-3">
-                <a class="btn btn-info" asp-area="" asp-controller="User" asp-action="GetCarpet" asp-route-username="@carpet.Username" asp-route-id="@carpet.Id">@carpet.Name</a>
+                <a class="btn btn-info" asp-area="" asp-controller="Carpet" asp-action="GetCarpet" asp-route-id="@carpet.Id">@carpet.Name</a>
             </div>
         }
     </div>
