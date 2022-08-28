@@ -17,6 +17,7 @@
 }
 
 #menu > a + button,
+#menu > a + a,
 #menu > button + button,
 #menu > button + a {
     margin-top: 24px;
