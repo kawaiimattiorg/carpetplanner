@@ -33,10 +33,13 @@
         [Route("/user")]
         public IActionResult GetUsers()
         {
+            var currentUser = User.GetObjectId() ?? throw new InvalidOperationException();
+
             var data = new UserSelectionViewModel
             {
                 Aliases = _context
                     .Aliases
+                    .Where(alias => alias.ObjectId != currentUser)
                     .OrderBy(alias => alias.Alias)
                     .Select(alias => alias.Alias)
                     .ToList()
@@ -57,6 +60,7 @@
             var data = new CarpetSelectionViewModel
             {
                 Alias = objectId,
+                NewCarpetVisible = true,
                 Carpets = _context
                     .Carpets
                     .Where(carpet => carpet.Owner == objectId && !carpet.Removed)

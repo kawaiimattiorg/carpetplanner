@@ -18,6 +18,12 @@ namespace CarpetPlannerB2c.Models
         public CarpetEntity Carpet { get; set; }
 
         /// <summary>
+        /// Whether current user is allowed to edit the carpet. Buttons that would
+        /// make changes to the carpet are only shown when this is true.
+        /// </summary>
+        public bool EditAllowed { get; set; }
+
+        /// <summary>
         /// List of colors that user can use.
         /// </summary>
         public IList<ColorEntity> Colors { get; set; }

@@ -71,6 +71,8 @@
         [Route("/carpet/{id}")]
         public IActionResult GetCarpet(int id)
         {
+            var currentUser = User.GetObjectId() ?? throw new InvalidOperationException();
+
             var selectedCarpet = _context
                 .Carpets
                 .FirstOrDefault(carpet => carpet.Id == id && !carpet.Removed);
@@ -123,6 +125,7 @@
             {
                 Alias = alias.Alias,
                 Carpet = selectedCarpet,
+                EditAllowed = selectedCarpet.Owner == currentUser,
                 Colors = colors
                     .Where(color => !color.Removed)
                     .OrderBy(color => color.Ordinal)
