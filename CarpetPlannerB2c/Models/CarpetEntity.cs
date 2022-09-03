@@ -1,6 +1,7 @@
 ﻿namespace CarpetPlannerB2c.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -46,6 +47,7 @@
         /// List of stripes related to this carpet.
         /// </summary>
         [JsonProperty(PropertyName = "stripes")]
+        [NotMapped]
         public IList<StripeEntity> Stripes { get; set; }
     }
 }
