@@ -153,11 +153,16 @@
 
             var carpet = _context
                 .Carpets
-                .FirstOrDefault(entity => entity.Owner == owner && entity.Id == id && !entity.Removed);
+                .FirstOrDefault(entity => entity.Id == id && !entity.Removed);
 
             if (carpet == null)
             {
                 return NotFound();
+            }
+
+            if (carpet.Owner == owner)
+            {
+                return Unauthorized();
             }
 
             var lastStripe = _context
@@ -197,11 +202,16 @@
 
             var carpet = _context
                 .Carpets
-                .FirstOrDefault(entity => entity.Owner == owner && entity.Id == id && !entity.Removed);
+                .FirstOrDefault(entity => entity.Id == id && !entity.Removed);
 
             if (carpet == null)
             {
                 return NotFound();
+            }
+
+            if (carpet.Owner == owner)
+            {
+                return Unauthorized();
             }
 
             var changes = false;
@@ -240,11 +250,16 @@
 
             var carpet = _context
                 .Carpets
-                .FirstOrDefault(entity => entity.Owner == owner && entity.Id == id && !entity.Removed);
+                .FirstOrDefault(entity => entity.Id == id && !entity.Removed);
 
             if (carpet == null)
             {
                 return NotFound();
+            }
+
+            if (carpet.Owner == owner)
+            {
+                return Unauthorized();
             }
 
             var stripes = _context
