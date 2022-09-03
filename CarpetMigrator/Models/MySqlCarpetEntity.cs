@@ -3,7 +3,7 @@
     /// <summary>
     /// CarpetEntity
     /// </summary>
-    public class CarpetEntity
+    public class MySqlCarpetEntity
     {
         /// <summary>
         /// Identifier

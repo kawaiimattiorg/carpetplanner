@@ -22,7 +22,12 @@
         /// <summary>
         ///
         /// </summary>
-        public DbSet<CarpetEntity> Carpets { get; set; }
+        public DbSet<AliasEntity> Aliases { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public DbSet<SqliteCarpetEntity> Carpets { get; set; }
 
         /// <summary>
         ///

@@ -45,6 +45,10 @@ Parser
             throw new InvalidOperationException("Target has existing entities!");
         }
 
+        var aliases = targetContext
+            .Aliases
+            .ToDictionary(alias => alias.Alias, alias => alias.ObjectId);
+
         foreach (var color in sourceContext.Colors)
         {
             targetContext.Colors.Add(color);
@@ -52,7 +56,17 @@ Parser
 
         foreach (var carpet in sourceContext.Carpets)
         {
-            targetContext.Add(carpet);
+            targetContext.Add(new SqliteCarpetEntity
+            {
+                Id = carpet.Id,
+                Name = carpet.Name,
+                Owner = aliases.TryGetValue(carpet.Username, out var objectId)
+                    ? objectId
+                    : carpet.Username,
+                Removed = carpet.Removed,
+                Width = carpet.Width,
+                StripeSeparator = carpet.StripeSeparator
+            });
         }
 
         foreach (var stripe in sourceContext.Stripes)
@@ -60,9 +74,7 @@ Parser
             targetContext.Add(stripe);
         }
 
-        targetContext.SaveChangesAsync();
-
-        var a = 1;
+        targetContext.SaveChanges();
     });
 
 public class Options

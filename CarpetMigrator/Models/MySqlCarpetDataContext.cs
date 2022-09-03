@@ -35,7 +35,7 @@
         /// <summary>
         ///
         /// </summary>
-        public DbSet<CarpetEntity> Carpets { get; set; }
+        public DbSet<MySqlCarpetEntity> Carpets { get; set; }
 
         /// <summary>
         ///
