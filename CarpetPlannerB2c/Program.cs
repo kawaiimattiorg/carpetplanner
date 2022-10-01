@@ -1,6 +1,5 @@
 using CarpetPlannerB2c.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
@@ -16,13 +15,6 @@ b2cSection["ClientSecret"] = Environment.GetEnvironmentVariable("CARPETPLANNER_B
 
 var sqliteConnectionString = $"Data Source={Path.Join(builder.Configuration["SQLITE_ROOT"], "carpetplanner.sqlite")}";
 builder.Services.AddDbContext<CarpetDataContext>(options => options.UseSqlite(sqliteConnectionString));
-
-builder.Services.AddCookiePolicy(cookies =>
-{
-    cookies.HttpOnly = HttpOnlyPolicy.Always;
-    cookies.MinimumSameSitePolicy = SameSiteMode.None;
-    cookies.Secure = CookieSecurePolicy.Always;
-});
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(b2cSection);
