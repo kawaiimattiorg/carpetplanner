@@ -160,7 +160,7 @@
                 return NotFound();
             }
 
-            if (carpet.Owner == owner)
+            if (carpet.Owner != owner)
             {
                 return Unauthorized();
             }
@@ -209,7 +209,7 @@
                 return NotFound();
             }
 
-            if (carpet.Owner == owner)
+            if (carpet.Owner != owner)
             {
                 return Unauthorized();
             }
@@ -257,7 +257,7 @@
                 return NotFound();
             }
 
-            if (carpet.Owner == owner)
+            if (carpet.Owner != owner)
             {
                 return Unauthorized();
             }
