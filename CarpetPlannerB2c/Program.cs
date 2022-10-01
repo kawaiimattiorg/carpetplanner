@@ -15,6 +15,11 @@ b2cSection["ClientSecret"] = Environment.GetEnvironmentVariable("CARPETPLANNER_B
 var sqliteConnectionString = $"Data Source={Path.Join(builder.Configuration["SQLITE_ROOT"], "carpetplanner.sqlite")}";
 builder.Services.AddDbContext<CarpetDataContext>(options => options.UseSqlite(sqliteConnectionString));
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.Secure = CookieSecurePolicy.Always;
+});
+
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(b2cSection);
 builder.Services.AddControllersWithViews();
