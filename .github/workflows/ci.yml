@@ -27,3 +27,36 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  deploy:
+    name: "Deploy to production"
+    runs-on: ubuntu-22.04
+    #if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    # needs: test
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/production.key
+          chmod 600 ~/.ssh/production.key
+          cat >>~/.ssh/config <<END
+          Host production
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/production.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.PRODUCTION_SSH_USER }}
+          SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
+          SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+
+      - name: Stop the server
+        run: ssh staging 'sudo systemctl stop kestrel-matto.service'
+
+      #- name: Check out the source
+      #  run: ssh staging 'cd my-application && git fetch && git reset --hard origin/master'
+
+      #- name: Start the server
+      #  if: ${{ always() }}
+      #  run: ssh staging 'sudo systemctl start kestrel-matto.service'
