@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model CarpetPlanner.Models.UserSelectionViewModel
+@{
+    ViewData["Title"] = "User selection";
+}
+
+@section Styles
+{
+
+    <link rel="stylesheet" href="~/css/user-selection.css"/>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Valitse käyttäjä</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <a href="/" class="btn btn-primary">Omat matot</a>
+        </div>
+        <div class="col-6">
+            <a id="sign-out" class="btn btn-danger" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Kirjaudu ulos</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var alias in Model.Aliases)
+        {
+            <div class="col-12 col-sm-3">
+                <a class="btn btn-info" asp-area="" asp-controller="User" asp-action="GetUserCarpets" asp-route-alias="@alias">@alias</a>
+            </div>
+        }
+    </div>
+
+</div>

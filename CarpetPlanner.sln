@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetMigrator", "CarpetMigrator\CarpetMigrator.csproj", "{49AA15FC-AD7D-4373-9F2C-EFE9A6217069}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetPlannerB2c", "CarpetPlannerB2c\CarpetPlannerB2c.csproj", "{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarpetPlanner", "CarpetPlanner\CarpetPlanner.csproj", "{ADA87D34-E03E-47CB-9469-A1BFE6E4BAFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
