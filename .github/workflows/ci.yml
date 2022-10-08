@@ -27,6 +27,10 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
+    # TODO: specify project to avoid publishing extra projects
+    - name: Publish
+      run: dotnet publish --no-build --configuration Release
+
   deploy:
     name: "Deploy to production"
     runs-on: ubuntu-22.04
