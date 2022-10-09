@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: my-artifact
-        path: $GITHUB_WORKSPACE/CarpetPlanner/bin/Release/net6.0/publish/
+        path: ${{ github.workspace }}/CarpetPlanner/bin/Release/net6.0/publish/
         if-no-files-found: error
 
   deploy:
