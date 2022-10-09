@@ -31,6 +31,13 @@ jobs:
     - name: Publish
       run: dotnet publish --no-build --configuration Release
 
+    - name: Upload publish folder
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: $GITHUB_WORKSPACE/CarpetPlanner/bin/Release/net6.0/publish/
+        if-no-files-found: error
+
   deploy:
     name: "Deploy to production"
     runs-on: ubuntu-22.04
