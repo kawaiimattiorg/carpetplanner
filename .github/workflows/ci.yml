@@ -61,8 +61,8 @@ jobs:
           path: ~/download/publish-folder
       #- name: Stop the server
       #  run: ssh production 'sudo systemctl stop kestrel-matto.service'
-      #- name: Check out the source
-      #  run: ssh production 'cd my-application && git fetch && git reset --hard origin/master'
+      - name: Copy publish folder contents to production server
+        run: scp -r -F ~/.ssh/production.key /home/runner/download/publish-folder ${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_SSH_HOST }}:/var/www/carpetplanner.new
       #- name: Start the server
       #  if: ${{ always() }}
       #  run: ssh production 'sudo systemctl start kestrel-matto.service'
