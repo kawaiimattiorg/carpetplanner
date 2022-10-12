@@ -21,13 +21,6 @@ $(document).ready(function () {
         updateStripeSizes();
     });
 
-
-    $('#print').click(function () {
-        // TODO: CALL CONTROLLER OR OPEN ANOTHER PAGE THAT PRINTS??
-
-        alert('print');
-    });
-
     updateStripeSizes();
 });
 
