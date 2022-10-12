@@ -65,7 +65,7 @@ jobs:
       - name: Stop the server
         run: ssh production 'sudo systemctl stop kestrel-matto.service'
       - name: Rename old version to carpetplanner.old
-        run: ssh production '[ -d /var/www/carpetplanner ] && mv /var/www/carpetplanner /var/www/carpetplanner.old'
+        run: ssh production 'mv /var/www/carpetplanner /var/www/carpetplanner.old'
       - name: Rename new version to carpetplanner
         run: ssh production 'mv /var/www/carpetplanner.new /var/www/carpetplanner'
       - name: Remove old version
