@@ -3,16 +3,19 @@ let carpetId;
 $(document).ready(function () {
     carpetId = parseInt($('#carpet-id').val());
 
-    initializeCarpetNameChange();
-    initializeCarpetWidthChange();
-    initializeMoveStripes();
-    initializeStripeHeightChange();
+    if ($('#edit-allowed').val() === 'True')
+    {
+        initializeCarpetNameChange();
+        initializeCarpetWidthChange();
+        initializeMoveStripes();
+        initializeStripeHeightChange();
 
-    initializeSelectStripe();
-    initializePostStripe();
+        initializeSelectStripe();
+        initializePostStripe();
 
-    initializePatchStripe();
-    initializeDeleteStripes();
+        initializePatchStripe();
+        initializeDeleteStripes();
+    }
 
     $(window).on('resize', function () {
         updateStripeSizes();
