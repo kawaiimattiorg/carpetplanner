@@ -12,9 +12,7 @@ var b2cSection = builder.Configuration.GetSection("AzureAdB2C");
 b2cSection["ClientSecret"] = Environment.GetEnvironmentVariable("CARPETPLANNER_B2C_CLIENTSECRET") ?? throw new Exception("ClientSecret not found");
 
 // Add services to the container.
-
-var sqliteConnectionString = $"Data Source={Path.Join(builder.Configuration["SQLITE_ROOT"], "carpetplanner.sqlite")}";
-builder.Services.AddDbContext<CarpetDataContext>(options => options.UseSqlite(sqliteConnectionString));
+builder.Services.AddDbContext<CarpetDataContext>(options => options.UseNpgsql(builder.Configuration["PsqlConnectionString"]));
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(b2cSection);
