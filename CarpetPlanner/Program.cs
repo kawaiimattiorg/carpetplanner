@@ -1,3 +1,4 @@
+using System.Net;
 using CarpetPlanner.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -30,10 +31,18 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    var options = new ForwardedHeadersOptions
     {
         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-    });
+    };
+
+    var knownProxy = builder.Configuration["KnownProxy"];
+    if (!string.IsNullOrEmpty(knownProxy))
+    {
+        options.KnownProxies.Add(IPAddress.Parse(knownProxy));
+    }
+
+    app.UseForwardedHeaders(options);
 
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
