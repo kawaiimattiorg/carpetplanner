@@ -40,6 +40,7 @@ else
     if (!string.IsNullOrEmpty(knownProxy))
     {
         options.KnownProxies.Add(IPAddress.Parse(knownProxy));
+        Console.WriteLine($"Adding proxy:{knownProxy}");
     }
 
     app.UseForwardedHeaders(options);
