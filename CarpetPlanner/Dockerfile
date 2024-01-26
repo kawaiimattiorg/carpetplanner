@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["CarpetPlanner/CarpetPlanner.csproj", "CarpetPlanner/"]
@@ -12,7 +12,7 @@ COPY . .
 WORKDIR "/src/CarpetPlanner"
 RUN dotnet build "CarpetPlanner.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
+FROM --platform=$BUILDPLATFORM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "CarpetPlanner.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
