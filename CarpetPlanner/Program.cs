@@ -23,9 +23,12 @@ builder.Services.AddRazorPages()
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseHttpsRedirection();
-
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    // Https enforcing in production is done using nginx
+    app.UseHttpsRedirection();
+}
+else
 {
     app.UseForwardedHeaders(new ForwardedHeadersOptions
     {
