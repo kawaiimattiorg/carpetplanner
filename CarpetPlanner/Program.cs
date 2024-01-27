@@ -33,7 +33,8 @@ else
 {
     var options = new ForwardedHeadersOptions
     {
-        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+        ForwardLimit = 2
     };
 
     var knownProxy = builder.Configuration["KnownProxy"];
