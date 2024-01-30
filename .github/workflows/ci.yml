@@ -28,14 +28,10 @@ jobs:
     - name: Build image
       uses: docker/build-push-action@v5
       if: ${{ github.ref_type != 'tag' }}
+      id: build_image
       with:
         file: CarpetPlanner/Dockerfile
         platforms: linux/arm64
-    - name: Build and push image
-      uses: docker/build-push-action@v5
+    - name: Tag image
       if: ${{ github.ref_type == 'tag' }}
-      with:
-        file: CarpetPlanner/Dockerfile
-        platforms: linux/arm64
-        push: true
-        tags: ${{ secrets.CONTAINER_REGISTRY_ADDRESS}}/carpetplanner:${{ github.ref_name }}
+      run: docker tag ${{ steps.build_image.outputs.imageid }} ${{ secrets.CONTAINER_REGISTRY_ADDRESS}}/carpetplanner:${{ github.ref_name }}
