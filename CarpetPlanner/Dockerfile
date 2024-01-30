@@ -1,4 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+RUN dpkg --add-architecture arm64
 RUN apt-get update && apt-get install -y libgdiplus
 WORKDIR /app
 EXPOSE 80
