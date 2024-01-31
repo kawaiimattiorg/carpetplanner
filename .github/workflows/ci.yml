@@ -30,7 +30,7 @@ jobs:
       id: build_image
       with:
         file: CarpetPlanner/Dockerfile
-        load: true
+        load: ${{ github.ref_type == 'tag' }}
         platforms: linux/arm64
     - name: Tag image
       if: ${{ github.ref_type == 'tag' }}
