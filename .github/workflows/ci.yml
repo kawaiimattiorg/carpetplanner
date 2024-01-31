@@ -30,9 +30,14 @@ jobs:
       id: build_image
       with:
         file: CarpetPlanner/Dockerfile
-        load: ${{ github.ref_type == 'tag' }}
+        load: ${{ github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master' || github.ref_type == 'tag' }}
         platforms: linux/arm64
-    - name: Tag and push image
+    - name: Tag with latest and push image
+      if: ${{ github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name == 'master' }}
+      run: |
+        docker tag ${{ steps.build_image.outputs.imageid }} ${{ secrets.CONTAINER_REGISTRY_ADDRESS}}/carpetplanner:latest
+        docker push ${{ secrets.CONTAINER_REGISTRY_ADDRESS}}/carpetplanner:latest
+    - name: Tag with version and push image
       if: ${{ github.ref_type == 'tag' }}
       run: |
         docker tag ${{ steps.build_image.outputs.imageid }} ${{ secrets.CONTAINER_REGISTRY_ADDRESS}}/carpetplanner:${{ github.ref_name }}
