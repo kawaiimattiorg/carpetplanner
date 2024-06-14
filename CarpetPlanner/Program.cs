@@ -23,7 +23,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 // ReSharper disable once InconsistentNaming
 var b2cSection = builder.Configuration.GetSection("AzureAdB2C");
-b2cSection["ClientSecret"] = Environment.GetEnvironmentVariable("CARPETPLANNER_B2C_CLIENTSECRET") ?? throw new Exception("ClientSecret not found");
+b2cSection["ClientSecret"] = builder.Configuration["CARPETPLANNER_B2C_CLIENTSECRET"] ?? throw new Exception("ClientSecret not found");
 
 // Add services to the container.
 builder.Services.AddDbContext<CarpetDataContext>(options => options.UseNpgsql(builder.Configuration["PsqlConnectionString"]));
