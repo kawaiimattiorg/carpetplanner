@@ -8,19 +8,6 @@ using Microsoft.Identity.Web.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    options.ForwardLimit = 2;
-
-    var knownProxy = builder.Configuration["KnownProxy"];
-    if (!string.IsNullOrEmpty(knownProxy))
-    {
-        options.KnownProxies.Add(IPAddress.Parse(knownProxy));
-        Console.WriteLine($"Adding proxy:{knownProxy}");
-    }
-});
-
 // ReSharper disable once InconsistentNaming
 var b2cSection = builder.Configuration.GetSection("AzureAdB2C");
 b2cSection["ClientSecret"] = builder.Configuration["CARPETPLANNER_B2C_CLIENTSECRET"] ?? throw new Exception("ClientSecret not found");
@@ -53,7 +40,21 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseForwardedHeaders();
+
+    var forwardOptions = new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+        ForwardLimit = 2
+    };
+
+    var knownProxy = builder.Configuration["KnownProxy"];
+    if (!string.IsNullOrEmpty(knownProxy))
+    {
+        forwardOptions.KnownProxies.Add(IPAddress.Parse(knownProxy));
+        Console.WriteLine($"Adding proxy:{knownProxy}");
+    }
+
+    app.UseForwardedHeaders(forwardOptions);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
