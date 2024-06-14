@@ -53,11 +53,6 @@ else
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCookiePolicy(new CookiePolicyOptions
-{
-    MinimumSameSitePolicy = SameSiteMode.Lax,
-    Secure = CookieSecurePolicy.Always
-});
 app.UseAuthentication();
 app.UseAuthorization();
 
