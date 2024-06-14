@@ -30,6 +30,14 @@ builder.Services.AddDbContext<CarpetDataContext>(options => options.UseNpgsql(bu
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(b2cSection);
+
+// Without this you'll get following error:
+// IDW10303: Issuer: 'https://carpetplanner.b2clogin.com/7663a1b0-dea2-4b60-98d8-9828d143d30d/v2.0/', does not match any of the valid issuers provided for this application.
+builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+{
+    options.TokenValidationParameters.ValidIssuer = "https://carpetplanner.b2clogin.com/7663a1b0-dea2-4b60-98d8-9828d143d30d/v2.0/";
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
