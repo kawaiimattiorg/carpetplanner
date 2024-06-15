@@ -21,15 +21,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     }
 });
 
-// ReSharper disable once InconsistentNaming
-var b2cSection = builder.Configuration.GetSection("AzureAdB2C");
-b2cSection["ClientSecret"] = builder.Configuration["CARPETPLANNER_B2C_CLIENTSECRET"] ?? throw new Exception("ClientSecret not found");
-
 // Add services to the container.
 builder.Services.AddDbContext<CarpetDataContext>(options => options.UseNpgsql(builder.Configuration["PsqlConnectionString"]));
 
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(b2cSection);
+builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, Constants.AzureAdB2C);
 
 // Without this you'll get following error:
 // IDW10303: Issuer: 'https://carpetplanner.b2clogin.com/7663a1b0-dea2-4b60-98d8-9828d143d30d/v2.0/', does not match any of the valid issuers provided for this application.
