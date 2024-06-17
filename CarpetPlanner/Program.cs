@@ -14,11 +14,14 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
     options.ForwardLimit = 2;
 
-    var knownProxy = builder.Configuration["KnownProxy"];
-    if (!string.IsNullOrEmpty(knownProxy))
+    var knownProxies = builder.Configuration["KnownProxy"];
+    if (!string.IsNullOrEmpty(knownProxies))
     {
-        options.KnownProxies.Add(IPAddress.Parse(knownProxy));
-        Console.WriteLine($"Adding proxy:{knownProxy}");
+        foreach (var knownProxy in knownProxies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            options.KnownProxies.Add(IPAddress.Parse(knownProxy));
+            Console.WriteLine($"Adding proxy:{knownProxy}");
+        }
     }
 });
 
