@@ -1,4 +1,5 @@
 using System.Net;
+using CarpetPlanner;
 using CarpetPlanner.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -38,6 +39,8 @@ builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
 var app = builder.Build();
+
+app.UseMiddleware<IPLoggingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
