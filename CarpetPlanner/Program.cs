@@ -21,11 +21,6 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     }
 });
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.MinimumSameSitePolicy = SameSiteMode.Lax;
-});
-
 // Add services to the container.
 builder.Services.AddDbContext<CarpetDataContext>(options => options.UseNpgsql(builder.Configuration["PsqlConnectionString"]));
 
@@ -59,8 +54,6 @@ else
 }
 
 app.UseStaticFiles();
-
-app.UseCookiePolicy();
 
 app.UseRouting();
 app.UseAuthentication();
