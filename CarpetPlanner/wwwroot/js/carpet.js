@@ -202,41 +202,44 @@ function initializePostStripe() {
 }
 
 function performStripePatch(data) {
-    $.ajax({
-        url: '/stripe/' + carpetId,
-        method: 'PATCH',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function (response) {
-            let $carpet = $('#carpet');
-
-            response.stripes.forEach(function (stripeId) {
-                let $stripe = $carpet.children('div[data-stripe-id="' + stripeId + '"]');
-
-                if (response.height !== null) {
-                    $stripe.data('stripeHeight', response.height);
-                    $stripe.children('.stripe-height').text(response.height);
-                }
-
-                if (response.rgb !== null) {
-                    $stripe.children('.stripe-element').css('backgroundColor', '#' + response.rgb);
-                }
-
-                if (response.remove === true) {
-                    $stripe.remove();
-                }
-            });
-
-            if (response.moveDirection !== undefined && response.moveDirection !== null) {
-                updateStripeOrder(response.moved, response.moveDirection);
+    const applyStripeUpdates = (response) => {
+        const carpet = document.getElementById('carpet');
+        response.stripes.forEach(stripeId => {
+            const stripe = carpet.querySelector(`div[data-stripe-id="${stripeId}"]`);
+            if (response.height !== null){
+                stripe.setAttribute('data-stripe-height', response.height);
+                stripe.querySelector('.stripe-height').textContent = response.height;
             }
 
-            if (response.height !== null || response.remove === true) {
-                updateStripeSizes();
-                updateStripeHeight();
+            if (response.rgb !== null) {
+                stripe.querySelector('.stripe-element').style.backgroundColor = `#${response.rgb}`;
             }
+
+            if (response.remove === true) {
+                stripe.remove();
+            }
+        });
+
+        if (response.moveDirection) {
+            updateStripeOrder(response.moved, response.moveDirection);
         }
-    });
+
+        if (response.height !== null || response.remove === true) {
+            updateStripeSizes();
+            updateStripeHeight();
+        }
+    };
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    fetch(`/stripe/${carpetId}`, {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify(data)
+    }).then(result => result.json())
+        .then(update => applyStripeUpdates(update));
+
 }
 
 function updateStripeOrder(moved, direction) {
