@@ -163,41 +163,42 @@ function initializeSelectStripe() {
 }
 
 function initializePostStripe() {
-
-    $('#new-stripe').click(function () {
-        $.ajax({
-            url: '/carpet/' + carpetId,
+    const handleClickPostNewStripe = () => {
+        fetch(`/carpet/${carpetId}`, {
             method: 'POST',
-            success: function (data) {
-                $('#carpet').append($('<div>', {
-                    attr: {
-                        'data-stripe-id': data.id,
-                        'data-stripe-height': data.height
-                    },
-                    html: [
-                        $('<div>', {
-                            'class': 'stripe-selection',
-                            html: $('<span>')
-                        }),
-                        $('<div>', {
-                            'class': 'stripe-element',
-                            css: {
-                                "backgroundColor": data.colorString
-                            }
-                        }),
-                        $('<div>', {
-                            'class': 'stripe-height',
-                            html: $('<span>', {
-                                text: data.height
-                            })
-                        })]
-                }));
+        })
+            .then(result => result.json())
+            .then(stripe => addNewStripe(stripe));
+    };
 
-                updateStripeSizes();
-                updateStripeHeight();
-            }
-        });
-    });
+    const addNewStripe = (stripe) => {
+        const container = document.createElement('div');
+        container.setAttribute('data-stripe-id', stripe.id);
+        container.setAttribute('data-stripe-height', stripe.height);
+
+        const stripeSelection = document.createElement('div');
+        stripeSelection.classList.add('stripe-selection');
+        stripeSelection.append(document.createElement('span'));
+        container.append(stripeSelection);
+
+
+        const stripeElement = document.createElement('div');
+        stripeElement.classList.add('stripe-element');
+        stripeElement.style.backgroundColor = stripe.colorString;
+        container.append(stripeElement);
+
+        const stripeHeight = document.createElement('div');
+        stripeHeight.classList.add('stripe-height');
+        stripeHeight.textContent = stripe.height;
+        container.append(stripeHeight);
+
+        document.getElementById('carpet').append(container);
+
+        updateStripeSizes();
+        updateStripeHeight();
+    };
+
+    document.getElementById('new-stripe').addEventListener('click', handleClickPostNewStripe);
 }
 
 function performStripePatch(data) {
