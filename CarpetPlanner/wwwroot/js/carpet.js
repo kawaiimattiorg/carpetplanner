@@ -273,28 +273,25 @@ function updateStripeHeight() {
 }
 
 function updateStripeSizes() {
-    let $carpet = $('#carpet');
+    const carpet = document.getElementById('carpet');
 
-    let $stripes = $carpet.children('div[data-stripe-id]');
+    let stripes = carpet.querySelectorAll('div[data-stripe-id]');
 
-    if ($stripes.length === 0) {
+    if (stripes.length === 0) {
         return;
     }
 
-    let selectionWidth = $stripes.first().children('.stripe-selection').width();
-    let widthWidth = $stripes.first().children('.stripe-height').width();
+    let selectionWidth = stripes[0].querySelector('.stripe-selection').clientWidth;
+    let widthWidth = stripes[0].querySelector('.stripe-height').clientWidth;
 
-    let uiHeightPx = $carpet.height();
-    let uiWidthPx = $carpet.width() - selectionWidth - widthWidth;
+    let uiHeightPx = carpet.clientHeight;
+    let uiWidthPx = carpet.clientWidth - selectionWidth - widthWidth;
     let uiRatio = uiWidthPx / uiHeightPx;
 
     let carpetHeight = 0;
-    $stripes.each(function () {
-        carpetHeight += parseInt($(this).data('stripeHeight'));
-    });
+    stripes.forEach( (stripe)=> carpetHeight += parseInt(stripe.getAttribute('data-stripe-height')));
 
-    let carpetWidth = parseInt($('#width-value').text());
-    let carpetRatio = carpetWidth / carpetHeight;
+    let carpetWidth = parseInt(document.getElementById('width-value').textContent);
 
     let uiHeightCm = carpetWidth / uiRatio;
 
@@ -304,18 +301,16 @@ function updateStripeSizes() {
         let cmToPixel = uiHeightPx / carpetHeight;
         let widthPx = carpetWidth * cmToPixel;
 
-        $stripes.each(function () {
-            let $this = $(this);
-            $this.children('.stripe-element').css('width', widthPx + 'px');
-            $this.css('height', parseInt($this.data('stripeHeight')) * cmToPixel + 'px');
+        stripes.forEach((stripe)=> {
+            stripe.querySelector('.stripe-element').style.width = `${widthPx}px`;
+            stripe.style.height = `${parseInt(stripe.getAttribute('data-stripe-height')) * cmToPixel}px`;
         });
     } else {
         let cmToPixel = uiWidthPx / carpetWidth;
 
-        $stripes.each(function () {
-            let $this = $(this);
-            $this.children('.stripe-element').css('width', 'calc(100% - 80px)');
-            $this.css('height', parseInt($this.data('stripeHeight')) * cmToPixel + 'px');
+        stripes.forEach((stripe) => {
+            stripe.querySelector('.stripe-element').style.width = 'calc(100% - 80px)';
+            stripe.style.height  = `${parseInt(stripe.getAttribute('data-stripe-height')) * cmToPixel}px`
         });
     }
 }
