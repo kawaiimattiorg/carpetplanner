@@ -42,27 +42,24 @@ function initializeCarpetNameChange() {
 }
 
 function initializeCarpetWidthChange() {
-
-    $('#change-width').click(function () {
-        let width = parseInt(prompt('Anna uusi leveys senttimetreinä'));
+    const changeWidth = () => {
+        const width = parseInt(prompt('Anna uusi leveys senttimetreinä'));
 
         if (isNaN(width)) {
             return;
         }
 
-        $.ajax({
-            url: '/carpet/' + carpetId,
+        fetch(`/carpet/${carpetId}`, {
             method: 'PATCH',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                width: width
-            }),
-            success: function () {
-                $('#width-value').text(width);
-                updateStripeSizes();
-            }
+            headers: defaultHeaders,
+            body: JSON.stringify({ width })
+        }).then(_ => {
+            document.getElementById('width-value').textContent = width;
+            updateStripeSizes();
         });
-    });
+    };
+
+    document.getElementById('change-width').addEventListener('click', changeWidth);
 }
 
 function initializeMoveStripes() {
