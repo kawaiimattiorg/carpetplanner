@@ -17,10 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
         initializeDeleteStripes();
     }
 
-    $(window).on('resize', function () {
-        updateStripeSizes();
-    });
-
+    window.addEventListener('resize', updateStripeSizes);
     updateStripeSizes();
 });
 
