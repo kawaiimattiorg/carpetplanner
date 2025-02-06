@@ -1,9 +1,9 @@
 let carpetId;
 
 document.addEventListener("DOMContentLoaded", function() {
-    carpetId = parseInt($('#carpet-id').val());
+    carpetId = parseInt(document.getElementById("carpet-id").value);
 
-    if ($('#edit-allowed').val() === 'True')
+    if (document.getElementById("edit-allowed").value === 'True')
     {
         initializeCarpetNameChange();
         initializeCarpetWidthChange();
