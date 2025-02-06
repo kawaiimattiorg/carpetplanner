@@ -1,6 +1,6 @@
 let carpetId;
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function() {
     carpetId = parseInt($('#carpet-id').val());
 
     if ($('#edit-allowed').val() === 'True')
