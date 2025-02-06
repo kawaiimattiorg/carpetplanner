@@ -1,5 +1,8 @@
 let carpetId;
 
+const defaultHeaders = new Headers();
+defaultHeaders.append('Content-Type', 'application/json');
+
 document.addEventListener("DOMContentLoaded", function() {
     carpetId = parseInt(document.getElementById("carpet-id").value);
 
@@ -22,25 +25,20 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function initializeCarpetNameChange() {
-    $('#change-name').click(function () {
-        let name = prompt('Anna uusi nimi');
+    const changeCarpetName = () => {
+        const name = prompt('Anna uusi nimi');
 
-        if (name === null || name.length === 0) {
+        if (!name) {
             return;
         }
 
-        $.ajax({
-            url: '/carpet/' + carpetId,
+        fetch(`/carpet/${carpetId}`, {
             method: 'PATCH',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                name: name
-            }),
-            success: function () {
-                $('#name').text(name);
-            }
-        });
-    });
+            headers: defaultHeaders,
+            body: JSON.stringify({name})
+        }).then(_ => document.getElementById('name').textContent = name);
+    }
+    document.getElementById('change-name').addEventListener('click', changeCarpetName);
 }
 
 function initializeCarpetWidthChange() {
@@ -227,12 +225,9 @@ function performStripePatch(data) {
         }
     };
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
     fetch(`/stripe/${carpetId}`, {
         method: 'PATCH',
-        headers,
+        headers: defaultHeaders,
         body: JSON.stringify(data)
     }).then(result => result.json())
         .then(update => applyStripeUpdates(update));
