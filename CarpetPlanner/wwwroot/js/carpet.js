@@ -177,8 +177,8 @@ function initializePostStripe() {
 
   const addNewStripe = (stripe) => {
     const container = document.createElement("div");
-    container.setAttribute("data-stripe-id", stripe.id);
-    container.setAttribute("data-stripe-height", stripe.height);
+    container.dataset.stripeId = stripe.id;
+    container.dataset.stripeHeight = stripe.height;
 
     const stripeSelection = document.createElement("div");
     stripeSelection.classList.add("stripe-selection");
@@ -212,7 +212,7 @@ function performStripePatch(data) {
     response.stripes.forEach((stripeId) => {
       const stripe = carpet.querySelector(`div[data-stripe-id="${stripeId}"]`);
       if (response.height !== null) {
-        stripe.setAttribute("data-stripe-height", response.height);
+        stripe.dataset.stripeHeight = response.height;
         stripe.querySelector(".stripe-height").textContent = response.height;
       }
 
@@ -295,8 +295,7 @@ function updateStripeSizes() {
 
   let carpetHeight = 0;
   stripes.forEach(
-    (stripe) =>
-      (carpetHeight += parseInt(stripe.getAttribute("data-stripe-height")))
+    (stripe) => (carpetHeight += parseInt(stripe.dataset.stripeHeight))
   );
 
   let carpetWidth = parseInt(
@@ -314,7 +313,7 @@ function updateStripeSizes() {
     stripes.forEach((stripe) => {
       stripe.querySelector(".stripe-element").style.width = `${widthPx}px`;
       stripe.style.height = `${
-        parseInt(stripe.getAttribute("data-stripe-height")) * cmToPixel
+        parseInt(stripe.dataset.stripeHeight) * cmToPixel
       }px`;
     });
   } else {
@@ -323,7 +322,7 @@ function updateStripeSizes() {
     stripes.forEach((stripe) => {
       stripe.querySelector(".stripe-element").style.width = "calc(100% - 80px)";
       stripe.style.height = `${
-        parseInt(stripe.getAttribute("data-stripe-height")) * cmToPixel
+        parseInt(stripe.dataset.stripeHeight) * cmToPixel
       }px`;
     });
   }
