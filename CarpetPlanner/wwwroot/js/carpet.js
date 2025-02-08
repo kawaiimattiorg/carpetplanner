@@ -81,26 +81,27 @@ function initializeMoveStripes() {
 }
 
 function initializeStripeHeightChange() {
-    $('#change-height').click(function () {
-        let stripes = getSelectedStripes();
-
+    const changeHeight = () => {
+        const stripes = getSelectedStripes();
         if (stripes.length === 0) {
             return;
         }
 
-        var height = parseInt(prompt('Anna uusi pituus senttimetreinä'));
+        const height = parseInt(prompt('Anna uusi pituus senttimetreinä'));
 
         if (isNaN(height)) {
             return;
         }
 
-        let data = {
+        const data = {
             stripes: stripes,
             height: height
         };
 
         performStripePatch(data);
-    });
+    }
+
+    document.getElementById('change-height').addEventListener('click', changeHeight);
 }
 
 function getSelectedStripes() {
