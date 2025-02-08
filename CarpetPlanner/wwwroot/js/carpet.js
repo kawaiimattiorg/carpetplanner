@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
   updateStripeSizes();
 });
 
+const toggleSelected = (event) => {
+  event.target.parentElement.classList.toggle("active");
+};
+
 function initializeCarpetNameChange() {
   const changeCarpetName = () => {
     const name = prompt("Anna uusi nimi");
@@ -166,9 +170,7 @@ function initializePatchStripe() {
 
 function initializeSelectStripe() {
   document.querySelectorAll("#carpet > div").forEach((stripe) => {
-    stripe.addEventListener("click", () => {
-      stripe.classList.toggle("active");
-    });
+    stripe.addEventListener("click", toggleSelected);
   });
 }
 
@@ -185,9 +187,7 @@ function initializePostStripe() {
     const container = document.createElement("div");
     container.dataset.stripeId = stripe.id;
     container.dataset.stripeHeight = stripe.height;
-    container.addEventListener("click", () => {
-      container.classList.toggle("active");
-    });
+    container.addEventListener("click", toggleSelected);
 
     const stripeSelection = document.createElement("div");
     stripeSelection.classList.add("stripe-selection");
