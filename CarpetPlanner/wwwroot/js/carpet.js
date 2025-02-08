@@ -63,20 +63,21 @@ function initializeCarpetWidthChange() {
 }
 
 function initializeMoveStripes() {
-    $('#move-up, #move-down').click(function () {
-        let stripes = getSelectedStripes();
-
+    const moveStripes = (moveDirection) => {
+        const stripes = getSelectedStripes();
         if (stripes.length === 0) {
             return;
         }
 
-        let data = {
-            stripes: stripes,
-            moveDirection: parseInt($(this).data('moveDirection'))
+        const data = {
+            stripes,
+            moveDirection
         };
-
         performStripePatch(data);
-    });
+    };
+
+    document.getElementById('move-up').addEventListener('click', () => moveStripes(-1));
+    document.getElementById('move-down').addEventListener('click', () => moveStripes(1));
 }
 
 function initializeStripeHeightChange() {
