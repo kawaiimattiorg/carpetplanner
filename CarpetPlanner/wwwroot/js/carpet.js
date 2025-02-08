@@ -114,12 +114,9 @@ function initializeStripeHeightChange() {
 }
 
 function getSelectedStripes() {
-  return $("#carpet")
-    .children(".active")
-    .map(function () {
-      return $(this).data("stripeId");
-    })
-    .get();
+  return Array.from(document.querySelectorAll("#carpet > .active")).map(
+    (element) => element.dataset.stripeId
+  );
 }
 
 function initializeDeleteStripes() {
