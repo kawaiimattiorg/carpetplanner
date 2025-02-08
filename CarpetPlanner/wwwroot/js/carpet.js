@@ -264,13 +264,14 @@ function updateStripeOrder(moved, direction) {
 function updateStripeHeight() {
   let carpetHeight = 0;
 
-  $("#carpet")
-    .children("div[data-stripe-id]")
-    .each(function () {
-      carpetHeight += parseInt($(this).data("stripeHeight"));
+  document
+    .getElementById("carpet")
+    .querySelectorAll("div[data-stripe-id]")
+    .forEach((stripe) => {
+      carpetHeight += parseInt(stripe.dataset.stripeHeight);
     });
 
-  $("#height-value").text(carpetHeight);
+  document.getElementById("height-value").textContent = carpetHeight;
 }
 
 function updateStripeSizes() {
