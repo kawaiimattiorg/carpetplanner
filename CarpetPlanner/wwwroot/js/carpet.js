@@ -141,20 +141,27 @@ function initializeDeleteStripes() {
 }
 
 function initializePatchStripe() {
-  $("#edit").on("click", "div[data-color-id]", function () {
-    let stripes = getSelectedStripes();
+  const triggerColorChange = (event) => {
+    const stripes = getSelectedStripes();
 
     if (stripes.length === 0) {
       return;
     }
 
-    let data = {
+    const data = {
       stripes: stripes,
-      color: $(this).data("colorId"),
+      color: event.target.dataset.colorId,
     };
 
     performStripePatch(data);
-  });
+  };
+
+  document
+    .getElementById("edit")
+    .querySelectorAll("div[data-color-id]")
+    .forEach((element) => {
+      element.addEventListener("click", triggerColorChange);
+    });
 }
 
 function initializeSelectStripe() {
