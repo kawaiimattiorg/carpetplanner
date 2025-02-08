@@ -244,19 +244,18 @@ function performStripePatch(data) {
 }
 
 function updateStripeOrder(moved, direction) {
-  $.each(moved, function (index, id) {
-    let stripe = $("#carpet")
-      .children("div[data-stripe-id=" + id + "]")
-      .first();
+  const carpet = document.getElementById("carpet");
+  moved.forEach((id) => {
+    let stripe = carpet.querySelector(`div[data-stripe-id="${id}"]`);
 
     // move up
-    if (direction === -1) {
-      stripe.insertBefore(stripe.prev());
+    if (direction === -1 && stripe.previousElementSibling) {
+      stripe.parentNode.insertBefore(stripe, stripe.previousElementSibling);
     }
 
     // move down
-    if (direction === 1) {
-      stripe.insertAfter(stripe.next());
+    if (direction === 1 && stripe.nextElementSibling) {
+      stripe.parentNode.insertBefore(stripe.nextElementSibling, stripe);
     }
   });
 }
