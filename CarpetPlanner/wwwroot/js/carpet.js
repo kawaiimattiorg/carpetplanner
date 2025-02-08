@@ -224,7 +224,7 @@ function performStripePatch(data) {
       }
     });
 
-    if (response.moveDirection) {
+    if (response.moveDirection && response.moved) {
       updateStripeOrder(response.moved, response.moveDirection);
     }
 
