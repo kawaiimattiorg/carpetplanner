@@ -3,29 +3,27 @@ let carpetId;
 const defaultHeaders = new Headers();
 defaultHeaders.append("Content-Type", "application/json");
 
-document.addEventListener("DOMContentLoaded", function () {
-  carpetId = parseInt(document.getElementById("carpet-id").value);
-
-  if (document.getElementById("edit-allowed").value === "True") {
-    initializeCarpetNameChange();
-    initializeCarpetWidthChange();
-    initializeMoveStripes();
-    initializeStripeHeightChange();
-
-    initializeSelectStripe();
-    initializePostStripe();
-
-    initializePatchStripe();
-    initializeDeleteStripes();
-  }
-
-  window.addEventListener("resize", updateStripeSizes);
-  updateStripeSizes();
-});
+carpetId = parseInt(document.getElementById("carpet-id").value);
 
 const toggleSelected = (event) => {
   event.target.parentElement.classList.toggle("active");
 };
+
+if (document.getElementById("edit-allowed").value === "True") {
+  initializeCarpetNameChange();
+  initializeCarpetWidthChange();
+  initializeMoveStripes();
+  initializeStripeHeightChange();
+
+  initializeSelectStripe();
+  initializePostStripe();
+
+  initializePatchStripe();
+  initializeDeleteStripes();
+}
+
+window.addEventListener("resize", updateStripeSizes);
+updateStripeSizes();
 
 function initializeCarpetNameChange() {
   const changeCarpetName = () => {
