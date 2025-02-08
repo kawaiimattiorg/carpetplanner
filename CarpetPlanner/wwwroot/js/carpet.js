@@ -158,8 +158,10 @@ function initializePatchStripe() {
 }
 
 function initializeSelectStripe() {
-  $("#carpet").on("click", "div", function () {
-    $(this).toggleClass("active");
+  document.querySelectorAll("#carpet > div").forEach((stripe) => {
+    stripe.addEventListener("click", () => {
+      stripe.classList.toggle("active");
+    });
   });
 }
 
@@ -176,6 +178,9 @@ function initializePostStripe() {
     const container = document.createElement("div");
     container.dataset.stripeId = stripe.id;
     container.dataset.stripeHeight = stripe.height;
+    container.addEventListener("click", () => {
+      container.classList.toggle("active");
+    });
 
     const stripeSelection = document.createElement("div");
     stripeSelection.classList.add("stripe-selection");
