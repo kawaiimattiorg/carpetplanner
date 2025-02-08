@@ -114,8 +114,7 @@ function getSelectedStripes() {
 }
 
 function initializeDeleteStripes() {
-
-    $('#delete-stripes').click(function () {
+    const deleteStripes = () => {
 
         let stripes = getSelectedStripes();
 
@@ -128,9 +127,9 @@ function initializeDeleteStripes() {
             remove: true
         };
 
-        performStripePatch(data);
-    });
+        performStripePatch(data);}
 
+    document.getElementById('delete-stripes').addEventListener('click', deleteStripes);
 }
 
 function initializePatchStripe() {
