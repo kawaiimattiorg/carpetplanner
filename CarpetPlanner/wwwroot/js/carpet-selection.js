@@ -1,12 +1,11 @@
-$(document).ready(function () {
-    $('#new-carpet').click(function () {
-        $.ajax({
-            url: '/carpet',
-            method: 'POST',
-            contentType: 'application/json',
-            success: function (carpet) {
-                window.location = '/carpet/' + carpet.id
-            }
-        });
+const postNewCarpet = () => {
+  fetch("/carpet", {
+    method: "POST",
+  })
+    .then((result) => result.json())
+    .then((carpet) => {
+      window.location = "/carpet/" + carpet.id;
     });
-});
+};
+
+document.getElementById("new-carpet").addEventListener("click", postNewCarpet);
