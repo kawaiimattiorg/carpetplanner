@@ -1,9 +1,8 @@
-let carpetId;
+const carpetId = parseInt(document.getElementById("carpet-id").value);
+const carpetElement = document.getElementById("carpet");
 
 const defaultHeaders = new Headers();
 defaultHeaders.append("Content-Type", "application/json");
-
-carpetId = parseInt(document.getElementById("carpet-id").value);
 
 const toggleSelected = (event) => {
   event.target.parentElement.classList.toggle("active");
@@ -202,7 +201,7 @@ function initializePostStripe() {
     stripeHeight.textContent = stripe.height;
     container.append(stripeHeight);
 
-    document.getElementById("carpet").append(container);
+    carpetElement.append(container);
 
     updateStripeSizes();
     updateStripeHeight();
@@ -215,9 +214,10 @@ function initializePostStripe() {
 
 function performStripePatch(data) {
   const applyStripeUpdates = (response) => {
-    const carpet = document.getElementById("carpet");
     response.stripes.forEach((stripeId) => {
-      const stripe = carpet.querySelector(`div[data-stripe-id="${stripeId}"]`);
+      const stripe = carpetElement.querySelector(
+        `div[data-stripe-id="${stripeId}"]`
+      );
       if (response.height !== null) {
         stripe.dataset.stripeHeight = response.height;
         stripe.querySelector(".stripe-height").textContent = response.height;
@@ -254,9 +254,8 @@ function performStripePatch(data) {
 }
 
 function updateStripeOrder(moved, direction) {
-  const carpet = document.getElementById("carpet");
   moved.forEach((id) => {
-    let stripe = carpet.querySelector(`div[data-stripe-id="${id}"]`);
+    let stripe = carpetElement.querySelector(`div[data-stripe-id="${id}"]`);
 
     // move up
     if (direction === -1 && stripe.previousElementSibling) {
@@ -273,20 +272,15 @@ function updateStripeOrder(moved, direction) {
 function updateStripeHeight() {
   let carpetHeight = 0;
 
-  document
-    .getElementById("carpet")
-    .querySelectorAll("div[data-stripe-id]")
-    .forEach((stripe) => {
-      carpetHeight += parseInt(stripe.dataset.stripeHeight);
-    });
+  carpetElement.querySelectorAll("div[data-stripe-id]").forEach((stripe) => {
+    carpetHeight += parseInt(stripe.dataset.stripeHeight);
+  });
 
   document.getElementById("height-value").textContent = carpetHeight;
 }
 
 function updateStripeSizes() {
-  const carpet = document.getElementById("carpet");
-
-  let stripes = carpet.querySelectorAll("div[data-stripe-id]");
+  let stripes = carpetElement.querySelectorAll("div[data-stripe-id]");
 
   if (stripes.length === 0) {
     return;
@@ -296,8 +290,8 @@ function updateStripeSizes() {
     stripes[0].querySelector(".stripe-selection").clientWidth;
   let widthWidth = stripes[0].querySelector(".stripe-height").clientWidth;
 
-  let uiHeightPx = carpet.clientHeight;
-  let uiWidthPx = carpet.clientWidth - selectionWidth - widthWidth;
+  let uiHeightPx = carpetElement.clientHeight;
+  let uiWidthPx = carpetElement.clientWidth - selectionWidth - widthWidth;
   let uiRatio = uiWidthPx / uiHeightPx;
 
   let carpetHeight = 0;
