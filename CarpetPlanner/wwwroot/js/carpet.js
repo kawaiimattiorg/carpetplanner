@@ -4,246 +4,72 @@ const carpetElement = document.getElementById("carpet");
 const defaultHeaders = new Headers();
 defaultHeaders.append("Content-Type", "application/json");
 
-const toggleSelected = (event) => {
-  event.target.parentElement.classList.toggle("active");
+// Utility methods
+const addNewStripe = (stripe) => {
+  const container = document.createElement("div");
+  container.dataset.stripeId = stripe.id;
+  container.dataset.stripeHeight = stripe.height;
+  container.addEventListener("click", toggleSelected);
+
+  const stripeSelection = document.createElement("div");
+  stripeSelection.classList.add("stripe-selection");
+  stripeSelection.append(document.createElement("span"));
+  container.append(stripeSelection);
+
+  const stripeElement = document.createElement("div");
+  stripeElement.classList.add("stripe-element");
+  stripeElement.style.backgroundColor = stripe.colorString;
+  container.append(stripeElement);
+
+  const stripeHeight = document.createElement("div");
+  stripeHeight.classList.add("stripe-height");
+  stripeHeight.textContent = stripe.height;
+  container.append(stripeHeight);
+
+  carpetElement.append(container);
+
+  updateStripeSizes();
+  updateStripeHeight();
 };
 
-if (document.getElementById("edit-allowed").value === "True") {
-  initializeCarpetNameChange();
-  initializeCarpetWidthChange();
-  initializeMoveStripes();
-  initializeStripeHeightChange();
-
-  initializeSelectStripe();
-  initializePostStripe();
-
-  initializePatchStripe();
-  initializeDeleteStripes();
-}
-
-window.addEventListener("resize", updateStripeSizes);
-updateStripeSizes();
-
-function initializeCarpetNameChange() {
-  const changeCarpetName = () => {
-    const name = prompt("Anna uusi nimi");
-
-    if (!name) {
-      return;
+const applyStripeUpdates = (response) => {
+  response.stripes.forEach((stripeId) => {
+    const stripe = carpetElement.querySelector(
+      `div[data-stripe-id="${stripeId}"]`
+    );
+    if (response.height !== null) {
+      stripe.dataset.stripeHeight = response.height;
+      stripe.querySelector(".stripe-height").textContent = response.height;
     }
 
-    fetch(`/carpet/${carpetId}`, {
-      method: "PATCH",
-      headers: defaultHeaders,
-      body: JSON.stringify({ name }),
-    }).then((_) => (document.getElementById("name").textContent = name));
-  };
-  document
-    .getElementById("change-name")
-    .addEventListener("click", changeCarpetName);
-}
-
-function initializeCarpetWidthChange() {
-  const changeWidth = () => {
-    const width = parseInt(prompt("Anna uusi leveys senttimetreinä"));
-
-    if (isNaN(width)) {
-      return;
+    if (response.rgb !== null) {
+      stripe.querySelector(
+        ".stripe-element"
+      ).style.backgroundColor = `#${response.rgb}`;
     }
 
-    fetch(`/carpet/${carpetId}`, {
-      method: "PATCH",
-      headers: defaultHeaders,
-      body: JSON.stringify({ width }),
-    }).then((_) => {
-      document.getElementById("width-value").textContent = width;
-      updateStripeSizes();
-    });
-  };
-
-  document
-    .getElementById("change-width")
-    .addEventListener("click", changeWidth);
-}
-
-function initializeMoveStripes() {
-  const moveStripes = (moveDirection) => {
-    const stripes = getSelectedStripes();
-    if (stripes.length === 0) {
-      return;
+    if (response.remove === true) {
+      stripe.remove();
     }
+  });
 
-    const data = {
-      stripes,
-      moveDirection,
-    };
-    performStripePatch(data);
-  };
+  if (response.moveDirection && response.moved) {
+    updateStripeOrder(response.moved, response.moveDirection);
+  }
 
-  document
-    .getElementById("move-up")
-    .addEventListener("click", () => moveStripes(-1));
-  document
-    .getElementById("move-down")
-    .addEventListener("click", () => moveStripes(1));
-}
+  if (response.height !== null || response.remove === true) {
+    updateStripeSizes();
+    updateStripeHeight();
+  }
+};
 
-function initializeStripeHeightChange() {
-  const changeHeight = () => {
-    const stripes = getSelectedStripes();
-    if (stripes.length === 0) {
-      return;
-    }
-
-    const height = parseInt(prompt("Anna uusi pituus senttimetreinä"));
-
-    if (isNaN(height)) {
-      return;
-    }
-
-    const data = {
-      stripes: stripes,
-      height: height,
-    };
-
-    performStripePatch(data);
-  };
-
-  document
-    .getElementById("change-height")
-    .addEventListener("click", changeHeight);
-}
-
-function getSelectedStripes() {
+const getSelectedStripes = () => {
   return Array.from(document.querySelectorAll("#carpet > .active")).map(
     (element) => element.dataset.stripeId
   );
-}
+};
 
-function initializeDeleteStripes() {
-  const deleteStripes = () => {
-    let stripes = getSelectedStripes();
-
-    if (stripes.length === 0) {
-      return;
-    }
-
-    let data = {
-      stripes: stripes,
-      remove: true,
-    };
-
-    performStripePatch(data);
-  };
-
-  document
-    .getElementById("delete-stripes")
-    .addEventListener("click", deleteStripes);
-}
-
-function initializePatchStripe() {
-  const triggerColorChange = (event) => {
-    const stripes = getSelectedStripes();
-
-    if (stripes.length === 0) {
-      return;
-    }
-
-    const data = {
-      stripes: stripes,
-      color: event.target.dataset.colorId,
-    };
-
-    performStripePatch(data);
-  };
-
-  document
-    .getElementById("edit")
-    .querySelectorAll("div[data-color-id]")
-    .forEach((element) => {
-      element.addEventListener("click", triggerColorChange);
-    });
-}
-
-function initializeSelectStripe() {
-  document.querySelectorAll("#carpet > div").forEach((stripe) => {
-    stripe.addEventListener("click", toggleSelected);
-  });
-}
-
-function initializePostStripe() {
-  const handleClickPostNewStripe = () => {
-    fetch(`/carpet/${carpetId}`, {
-      method: "POST",
-    })
-      .then((result) => result.json())
-      .then((stripe) => addNewStripe(stripe));
-  };
-
-  const addNewStripe = (stripe) => {
-    const container = document.createElement("div");
-    container.dataset.stripeId = stripe.id;
-    container.dataset.stripeHeight = stripe.height;
-    container.addEventListener("click", toggleSelected);
-
-    const stripeSelection = document.createElement("div");
-    stripeSelection.classList.add("stripe-selection");
-    stripeSelection.append(document.createElement("span"));
-    container.append(stripeSelection);
-
-    const stripeElement = document.createElement("div");
-    stripeElement.classList.add("stripe-element");
-    stripeElement.style.backgroundColor = stripe.colorString;
-    container.append(stripeElement);
-
-    const stripeHeight = document.createElement("div");
-    stripeHeight.classList.add("stripe-height");
-    stripeHeight.textContent = stripe.height;
-    container.append(stripeHeight);
-
-    carpetElement.append(container);
-
-    updateStripeSizes();
-    updateStripeHeight();
-  };
-
-  document
-    .getElementById("new-stripe")
-    .addEventListener("click", handleClickPostNewStripe);
-}
-
-function performStripePatch(data) {
-  const applyStripeUpdates = (response) => {
-    response.stripes.forEach((stripeId) => {
-      const stripe = carpetElement.querySelector(
-        `div[data-stripe-id="${stripeId}"]`
-      );
-      if (response.height !== null) {
-        stripe.dataset.stripeHeight = response.height;
-        stripe.querySelector(".stripe-height").textContent = response.height;
-      }
-
-      if (response.rgb !== null) {
-        stripe.querySelector(
-          ".stripe-element"
-        ).style.backgroundColor = `#${response.rgb}`;
-      }
-
-      if (response.remove === true) {
-        stripe.remove();
-      }
-    });
-
-    if (response.moveDirection && response.moved) {
-      updateStripeOrder(response.moved, response.moveDirection);
-    }
-
-    if (response.height !== null || response.remove === true) {
-      updateStripeSizes();
-      updateStripeHeight();
-    }
-  };
-
+const performStripePatch = (data) => {
   fetch(`/stripe/${carpetId}`, {
     method: "PATCH",
     headers: defaultHeaders,
@@ -251,9 +77,19 @@ function performStripePatch(data) {
   })
     .then((result) => result.json())
     .then((update) => applyStripeUpdates(update));
+};
+
+function updateStripeHeight() {
+  let carpetHeight = 0;
+
+  carpetElement.querySelectorAll("div[data-stripe-id]").forEach((stripe) => {
+    carpetHeight += parseInt(stripe.dataset.stripeHeight);
+  });
+
+  document.getElementById("height-value").textContent = carpetHeight;
 }
 
-function updateStripeOrder(moved, direction) {
+const updateStripeOrder = (moved, direction) => {
   moved.forEach((id) => {
     let stripe = carpetElement.querySelector(`div[data-stripe-id="${id}"]`);
 
@@ -267,49 +103,38 @@ function updateStripeOrder(moved, direction) {
       stripe.parentNode.insertBefore(stripe.nextElementSibling, stripe);
     }
   });
-}
+};
 
-function updateStripeHeight() {
-  let carpetHeight = 0;
-
-  carpetElement.querySelectorAll("div[data-stripe-id]").forEach((stripe) => {
-    carpetHeight += parseInt(stripe.dataset.stripeHeight);
-  });
-
-  document.getElementById("height-value").textContent = carpetHeight;
-}
-
-function updateStripeSizes() {
-  let stripes = carpetElement.querySelectorAll("div[data-stripe-id]");
+const updateStripeSizes = () => {
+  const stripes = carpetElement.querySelectorAll("div[data-stripe-id]");
 
   if (stripes.length === 0) {
     return;
   }
 
-  let selectionWidth =
+  const selectionWidth =
     stripes[0].querySelector(".stripe-selection").clientWidth;
-  let widthWidth = stripes[0].querySelector(".stripe-height").clientWidth;
+  const widthWidth = stripes[0].querySelector(".stripe-height").clientWidth;
 
-  let uiHeightPx = carpetElement.clientHeight;
-  let uiWidthPx = carpetElement.clientWidth - selectionWidth - widthWidth;
-  let uiRatio = uiWidthPx / uiHeightPx;
+  const uiHeightPx = carpetElement.clientHeight;
+  const uiWidthPx = carpetElement.clientWidth - selectionWidth - widthWidth;
+  const uiRatio = uiWidthPx / uiHeightPx;
 
   let carpetHeight = 0;
   stripes.forEach(
     (stripe) => (carpetHeight += parseInt(stripe.dataset.stripeHeight))
   );
 
-  let carpetWidth = parseInt(
+  const carpetWidth = parseInt(
     document.getElementById("width-value").textContent
   );
 
-  let uiHeightCm = carpetWidth / uiRatio;
-
-  let tooHigh = carpetHeight > uiHeightCm;
+  const uiHeightCm = carpetWidth / uiRatio;
+  const tooHigh = carpetHeight > uiHeightCm;
 
   if (tooHigh) {
-    let cmToPixel = uiHeightPx / carpetHeight;
-    let widthPx = carpetWidth * cmToPixel;
+    const cmToPixel = uiHeightPx / carpetHeight;
+    const widthPx = carpetWidth * cmToPixel;
 
     stripes.forEach((stripe) => {
       stripe.querySelector(".stripe-element").style.width = `${widthPx}px`;
@@ -318,7 +143,7 @@ function updateStripeSizes() {
       }px`;
     });
   } else {
-    let cmToPixel = uiWidthPx / carpetWidth;
+    const cmToPixel = uiWidthPx / carpetWidth;
 
     stripes.forEach((stripe) => {
       stripe.querySelector(".stripe-element").style.width = "calc(100% - 80px)";
@@ -327,4 +152,158 @@ function updateStripeSizes() {
       }px`;
     });
   }
+};
+
+// Handler methods
+const handleClickPostNewStripe = () => {
+  fetch(`/carpet/${carpetId}`, {
+    method: "POST",
+  })
+    .then((result) => result.json())
+    .then((stripe) => addNewStripe(stripe));
+};
+
+const changeCarpetName = () => {
+  const name = prompt("Anna uusi nimi");
+
+  if (!name) {
+    return;
+  }
+
+  fetch(`/carpet/${carpetId}`, {
+    method: "PATCH",
+    headers: defaultHeaders,
+    body: JSON.stringify({ name }),
+  }).then((_) => (document.getElementById("name").textContent = name));
+};
+
+const changeHeight = () => {
+  const stripes = getSelectedStripes();
+  if (stripes.length === 0) {
+    return;
+  }
+
+  const height = parseInt(prompt("Anna uusi pituus senttimetreinä"));
+
+  if (isNaN(height)) {
+    return;
+  }
+
+  const data = {
+    stripes: stripes,
+    height: height,
+  };
+
+  performStripePatch(data);
+};
+
+const changeWidth = () => {
+  const width = parseInt(prompt("Anna uusi leveys senttimetreinä"));
+
+  if (isNaN(width)) {
+    return;
+  }
+
+  fetch(`/carpet/${carpetId}`, {
+    method: "PATCH",
+    headers: defaultHeaders,
+    body: JSON.stringify({ width }),
+  }).then((_) => {
+    document.getElementById("width-value").textContent = width;
+    updateStripeSizes();
+  });
+};
+
+const deleteStripes = () => {
+  let stripes = getSelectedStripes();
+
+  if (stripes.length === 0) {
+    return;
+  }
+
+  let data = {
+    stripes: stripes,
+    remove: true,
+  };
+
+  performStripePatch(data);
+};
+
+const moveStripes = (moveDirection) => {
+  const stripes = getSelectedStripes();
+  if (stripes.length === 0) {
+    return;
+  }
+
+  const data = {
+    stripes,
+    moveDirection,
+  };
+  performStripePatch(data);
+};
+
+const toggleSelected = (event) => {
+  event.target.parentElement.classList.toggle("active");
+};
+
+const triggerColorChange = (event) => {
+  const stripes = getSelectedStripes();
+
+  if (stripes.length === 0) {
+    return;
+  }
+
+  const data = {
+    stripes: stripes,
+    color: event.target.dataset.colorId,
+  };
+
+  performStripePatch(data);
+};
+
+updateStripeSizes();
+
+// Register common handlers
+window.addEventListener("resize", updateStripeSizes);
+
+// Register handlers for carpets that allow edits
+if (document.getElementById("edit-allowed").value === "True") {
+  document
+    .getElementById("change-name")
+    .addEventListener("click", changeCarpetName);
+
+  document
+    .getElementById("change-width")
+    .addEventListener("click", changeWidth);
+
+  document
+    .getElementById("move-up")
+    .addEventListener("click", () => moveStripes(-1));
+
+  document
+    .getElementById("move-down")
+    .addEventListener("click", () => moveStripes(1));
+
+  document
+    .getElementById("change-height")
+    .addEventListener("click", changeHeight);
+
+  document
+    .getElementById("delete-stripes")
+    .addEventListener("click", deleteStripes);
+
+  document
+    .getElementById("edit")
+    .querySelectorAll("div[data-color-id]")
+    .forEach((element) => {
+      element.addEventListener("click", triggerColorChange);
+    });
+
+  document.querySelectorAll("#carpet > div").forEach((stripe) => {
+    stripe.addEventListener("click", toggleSelected);
+  });
+
+  document
+    .getElementById("new-stripe")
+    .addEventListener("click", handleClickPostNewStripe);
 }
