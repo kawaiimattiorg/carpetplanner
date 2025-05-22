@@ -14,14 +14,12 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
     options.ForwardLimit = 2;
 
-    var knownProxies = builder.Configuration["KnownProxy"];
-    if (!string.IsNullOrEmpty(knownProxies))
+    var knownNetwork = builder.Configuration["KnownNetwork"];
+    if (!string.IsNullOrEmpty(knownNetwork))
     {
-        foreach (var knownProxy in knownProxies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-        {
-            options.KnownProxies.Add(IPAddress.Parse(knownProxy));
-            Console.WriteLine($"Adding proxy:{knownProxy}");
-        }
+        var split = knownNetwork.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        Console.WriteLine($"Adding network:{split[0]}/{split[1]}");
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(split[0]), int.Parse(split[1])));
     }
 });
 
