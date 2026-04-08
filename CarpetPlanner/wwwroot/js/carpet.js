@@ -307,3 +307,7 @@ if (document.getElementById("edit-allowed").value === "True") {
     .getElementById("new-stripe")
     .addEventListener("click", handleClickPostNewStripe);
 }
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/js/service-worker.js');
+}
